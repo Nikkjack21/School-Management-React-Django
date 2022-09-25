@@ -6,23 +6,38 @@ import { FaUserGraduate } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import axios from 'axios';
+// import axios from 'axios';
 
 const NewClass = () => {
     const [list, setList] = useState([]);
-    const token = JSON.parse(localStorage.getItem("access_token"));
+    const token = JSON.parse(localStorage.getItem("authToken"));
   console.log("token", token);
 
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/all-class", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.access}`,
         },
       })
       .then((response) => {
         setList(response.data);
       });
-  }, [token]);
+  }, [token.access]);
+
+  //   useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch("http://127.0.0.1:8000/all-class",{
+  //       credentials:'include',
+  //       headers:{
+  //         "Authorization": `Bearer ${token.access}`
+  //       }
+  //     });
+  //     const newData = await response.json();
+  //     setList(newData);
+  //   };
+  //   fetchData();
+  // }, [token]);
 
   return (
     <div className="mx-10">

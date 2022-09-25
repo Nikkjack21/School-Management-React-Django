@@ -3,8 +3,13 @@ import { BsPeople } from "react-icons/bs";
 import { MdWorkOutline } from "react-icons/md";
 import Marquee from "react-fast-marquee";
 import WelcomeDash from "../../OtherComponents/WelcomeDash";
+import { useContext } from "react";
+import AuthContext from "../../../../context/AuthContext";
 
 const AdminDashboard = () => {
+  const {user} = useContext(AuthContext)
+
+  console.log('USER', user);
   return (
     <div >
       <h1 className="text-blue-600    ">This is admin Dashboard</h1>

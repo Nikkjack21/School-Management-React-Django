@@ -9,11 +9,10 @@ import jwt_decode from "jwt-decode";
 
 
 const AdminLogin = () => {
-  const {setAuthToken, setUser, user } = useContext(AuthContext)
+  const {setAuthToken, setUser } = useContext(AuthContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
-  const {setCode} = useContext(AuthContext)
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
@@ -30,9 +29,7 @@ const AdminLogin = () => {
     const data = await response.json();
     console.log(data)
     setAuthToken(data); 
-    setCode(data); 
     setUser(jwt_decode(data.access))
-    localStorage.setItem('access_token', JSON.stringify(data.access))
     localStorage.setItem('authToken', JSON.stringify(data))
     navigate('/admin')
 
@@ -41,7 +38,6 @@ const AdminLogin = () => {
  
 
   }
-console.log('USER', user)
 
   return (
     <div>
