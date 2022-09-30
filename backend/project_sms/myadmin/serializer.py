@@ -1,5 +1,5 @@
 from dataclasses import fields
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, MultipleChoiceField,ListField
 from myadmin.models import *
 
 class ClassSerializer(ModelSerializer):
@@ -8,10 +8,22 @@ class ClassSerializer(ModelSerializer):
         fields = '__all__'
 
 
+
+class SubjectListSerializer(ModelSerializer):
+    
+    class Meta:
+        model = SubjectList
+        fields='__all__'
+
+
+
 class SubjectSerializer(ModelSerializer):
+    class_number = ClassSerializer()
+    subject_name = SubjectListSerializer(read_only=True, many=True)
     class Meta:
         model = AddSubject
         fields = '__all__'
+        
 
 
 class StudentSerializer(ModelSerializer):

@@ -13,11 +13,17 @@ urlpatterns=[
     path('edit-class/<int:id>', EditClass.as_view()),
     path('delete-class/<int:id>', DeleteClass.as_view()),
 
+
     # Admin Subject
     path('add-subject', AdminAddSubject.as_view()),
     path('edit-subject/<int:id>', EditAdminSubject.as_view()),
     path('all-subject', AllSubject.as_view()),
-    path('delete-subject', DeleteAdminSubject.as_view()),
+    path('delete-subject/<int:id>', DeleteAdminSubject.as_view()),
+    path('add-subject-name', AddSubjectName.as_view()),
+    path('all-subject-name', SubjectNameList.as_view()),
+    path('delete-subject-name/<int:pk>',SubjectNameDelete.as_view()),
+    path('edit-subject-name/<int:id>', SubjectNameEdit.as_view()),
+    path('add-gen-sub', AddSubjectGeneric.as_view()),
 
     # Admin Students
     path('add-student', AdminAddStudent.as_view()),

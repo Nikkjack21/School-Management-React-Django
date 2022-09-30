@@ -1,0 +1,14 @@
+.main{
+    margin: 0 4em 0 4em;
+    box-sizing: border-box;
+
+    
+}
+.body{
+    position: relative;
+    filter: blur(4px);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+

@@ -4,6 +4,10 @@ import AdminDashboardPage from "./pages/Admin/Home/AdminDashboard/AdminDashboard
 import { AuthProvider } from "./context/AuthContext";
 import AdminClassPages from "./pages/Admin/Home/AdminClass/AdminClassPages";
 import AdminSubjectPage from "./pages/Admin/Home/AdminSubject/AdminSubjectPage";
+import AddClassPage from "./pages/Admin/Home/AdminClass/AddClassPage";
+import Test from "./Test";
+import AddSubjectPage from "./pages/Admin/Home/AdminSubject/AddSubjectPage";
+import AdminStudentPage from "./pages/Admin/Home/AdminStudent/AdminStudentPage";
 
 
 
@@ -15,8 +19,18 @@ function App() {
           <Route path="/" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/class" element={<AdminClassPages/>} />
-
+          <Route path="/addclass" element={<AddClassPage/>} />
           <Route path="/subject" element={<AdminSubjectPage/>}/>
+          <Route path="/add-subject" element={<AddSubjectPage/>}/>
+          <Route path="/student" element={<AdminStudentPage/>}/>
+
+
+
+
+        {/* Test Component */}
+          <Route path="/test" element={<Test/>}/>
+
+          {/*  */}
           
         </Routes>
       </AuthProvider>

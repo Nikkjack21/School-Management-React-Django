@@ -34,17 +34,21 @@ class AddClass(models.Model):
     def __str__(self):
         return self.class_number
 
-class AddSubject(models.Model):
-    class_number        = models.ForeignKey(AddClass, on_delete=models.CASCADE)
+
+class SubjectList(models.Model):
     subject_name        = models.CharField(max_length=25)
-    marks               = models.IntegerField(null=True)
-    grade               = models.CharField(max_length=10, null=True)
+
+    def __str__(self):
+        return self.subject_name
+
+class AddSubject(models.Model):
+    class_number        = models.ForeignKey(AddClass, on_delete=models.CASCADE, blank=True, null=True)
+    subject_name        = models.ManyToManyField(SubjectList,blank=True)
+    marks               = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.class_number.class_number
-
-
-
+    
 
 
 

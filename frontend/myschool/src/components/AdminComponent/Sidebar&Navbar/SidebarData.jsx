@@ -28,7 +28,7 @@ export const SidebarData = [
   },
   {
     name: "Students",
-    path:"",
+    path:"/student",
     icon: <BsPeople/>
 
   },

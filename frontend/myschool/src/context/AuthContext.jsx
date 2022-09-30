@@ -30,33 +30,35 @@ const adminLogout =useCallback(()=>{
 },[navigate])
 
 
+let updateToken =  useCallback(async ()=>{
+    const response = await fetch('http://127.0.0.1:8000/api/token/refresh/',{
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({refresh:authToken?.refresh})
+    })
+    const data = await response.json()
+    if(response.status===200){
+        setAuthToken(data); 
+        setUser(jwt_decode(data.access))
+        localStorage.setItem('authToken', JSON.stringify(data)) 
+    }else{
+        adminLogout()
+          
+    }
+    
+},[authToken, adminLogout])
 
 useEffect(()=>{
-    let updateToken =  async ()=>{
-        const response = await fetch('http://127.0.0.1:8000/api/token/refresh/',{
-            method: "POST",
-            headers:{
-              "Content-Type": "application/json",
-            },
-            body:JSON.stringify({'refresh':authToken.refresh})
-        })
-        const data = await response.json()
-        if(response.status===200){
-            setAuthToken(data); 
-            setUser(jwt_decode(data.access))
-            localStorage.setItem('authToken', JSON.stringify(data)) 
-        }else{
-            adminLogout()
-        }
-        
-    }
-   let interval= setInterval(()=>{
-        if(authToken){
+    
+   let interval = setInterval(()=>{
+        if(authToken ){
             updateToken()
         }
-    }, 1000*60*4)
+    }, 10000*2)
     return ()=> clearInterval(interval)
-},[adminLogout,authToken])
+},[authToken,updateToken])
 
 
 
@@ -68,7 +70,6 @@ const ContextData = {
     setUser:setUser,
     setAuthToken:setAuthToken,
     adminLogout:adminLogout,
-  
 
 
     }
