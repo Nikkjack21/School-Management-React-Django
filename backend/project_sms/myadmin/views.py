@@ -6,7 +6,6 @@ from myadmin.models import *
 from myadmin.serializer import (
     ClassSerializer,
     EmployeeSerializer,
-    ParentInfoSerializer,
     StudentSerializer,
     SubjectListSerializer,
     SubjectSerializer,
@@ -188,42 +187,6 @@ class DeleteStudent(APIView):
 
 
 # ADMIN STUDENTS VIEWS ENDS
-
-
-# ADMIN PARENTS VIEWS BEGINS
-
-
-class AdminAddParent(APIView):
-    def post(self, request):
-        parent = ParentInfoSerializer(data=request.data)
-        if parent.is_valid():
-            parent.save()
-            return Response(parent.data, status=status.HTTP_201_CREATED)
-        return Response(404)
-
-
-class AdminEditParent(APIView):
-    def post(self, request, id):
-        parent = ParentInfo.objects.get(id=id)
-        serializer = ParentInfoSerializer(
-            instance=parent, data=request.data, partial=True
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(400)
-
-
-class DeleteParent(APIView):
-    def post(self, request, id):
-        parent = ParentInfo.objects.get(id=id)
-        if parent:
-            parent.delete()
-            return Response(200)
-        return Response(404)
-
-
-# ADMIN PARENTS VIEWS ENDS
 
 
 # ADMIN EMPLOYEE VIEWS BEGINS

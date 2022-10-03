@@ -8,6 +8,8 @@ import AddClassPage from "./pages/Admin/Home/AdminClass/AddClassPage";
 import Test from "./Test";
 import AddSubjectPage from "./pages/Admin/Home/AdminSubject/AddSubjectPage";
 import AdminStudentPage from "./pages/Admin/Home/AdminStudent/AdminStudentPage";
+import StudentListComponent from "./components/AdminComponent/AdminStudentComponent/StudentListComponent";
+import StudentFormComponent from "./components/AdminComponent/AdminStudentComponent/StudentFormComponent";
 
 
 
@@ -22,7 +24,10 @@ function App() {
           <Route path="/addclass" element={<AddClassPage/>} />
           <Route path="/subject" element={<AdminSubjectPage/>}/>
           <Route path="/add-subject" element={<AddSubjectPage/>}/>
-          <Route path="/student" element={<AdminStudentPage/>}/>
+          <Route  path="/student" element={<AdminStudentPage/>}>
+              <Route path="" element={<StudentListComponent/>}/>
+              <Route path="add-student" element={<StudentFormComponent/>}/>
+          </Route>
 
 
 

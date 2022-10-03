@@ -3,7 +3,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../../src/components/AdminComponent/AdminSubjectComponent/AddSubject.css";
 const AddSubject = ({ open, cancel }) => {
   const navigate = useNavigate();
   const [classNum, setClassNum] = useState([]);
@@ -38,6 +37,7 @@ const AddSubject = ({ open, cancel }) => {
         console.log("SUBJECT RESPONSE", response);
         if (response.status === 201) {
           alert("Subjects addedd to class");
+          navigate('/subject')
         } else {
           alert("something went wrong");
         }

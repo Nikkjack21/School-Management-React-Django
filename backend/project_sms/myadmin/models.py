@@ -52,23 +52,10 @@ class AddSubject(models.Model):
 
 
 
-class ParentInfo(models.Model):
-    father             = models.CharField(max_length=25)
-    mother             = models.CharField(max_length=25)
-    father_id          = models.CharField(max_length=25)
-    mother_id          = models.CharField(max_length=25)
-    father_job         = models.CharField(max_length=25) 
-    mother_job         = models.CharField(max_length=25) 
-    father_mob         = models.IntegerField()
-    mother_mob         = models.IntegerField()
-
-    def __str__(self):
-        return self.father
-    
 
 class AddStudent(models.Model):
     GENDER = (
-        ('None', 'Choose Your gender'),
+
         ('male', 'Male'),
         ('female', 'Female'),
         ('other', 'Other')
@@ -82,16 +69,25 @@ class AddStudent(models.Model):
     gender             = models.CharField(max_length=15, choices=GENDER, null=True)
     mobile             = models.IntegerField()
     Address            = models.TextField(max_length=300)
-    religion           = models.CharField(max_length=25, null=True)
-    cast               = models.CharField(max_length=25, null=True)
+    religion           = models.CharField(max_length=25, null=True, blank=True)
+    cast               = models.CharField(max_length=25, null=True, blank=True)
     email              = models.EmailField(max_length=50)
     country            = models.CharField(max_length=30)
     state              = models.CharField(max_length=25)
     city               = models.CharField(max_length=25)
     pincode            = models.IntegerField()
-    parent             = models.ForeignKey(ParentInfo,  on_delete=models.CASCADE, blank=True)
+   
     username           = models.CharField(max_length=15, default=name_gen)
     password           = models.CharField(max_length=15, default=pass_gen)
+
+    father             = models.CharField(max_length=25,null=True, blank=True)
+    mother             = models.CharField(max_length=25,null=True, blank=True )
+    father_id          = models.CharField(max_length=25,null=True, blank=True )
+    mother_id          = models.CharField(max_length=25,null=True, blank=True )
+    father_job         = models.CharField(max_length=25,null=True, blank=True ) 
+    mother_job         = models.CharField(max_length=25,null=True, blank=True ) 
+    father_mob         = models.IntegerField()
+    mother_mob         = models.IntegerField()
     
 
 

@@ -5,7 +5,6 @@ import { BsPlusLg } from "react-icons/bs";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import "../../AdminComponent/AdminSubjectComponent/AdminSubject.css";
 import CreateSubject from "./CreateSubject";
 import AddSubject from "./AddSubject";
 import { Link } from "react-router-dom";

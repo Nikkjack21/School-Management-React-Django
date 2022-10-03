@@ -32,11 +32,6 @@ urlpatterns=[
     path('delete-student', DeleteStudent.as_view()),
 
 
-    #Admin Parent
-    path('add-parent', AdminAddParent.as_view()),
-    path("edit-parent/<int:id>",AdminEditParent.as_view()),
-    path('delete-parent/<int:id>', DeleteParent.as_view()),
-
     #Admin Employee
 
     path('all-employee', AdminEmployeeList.as_view()),
