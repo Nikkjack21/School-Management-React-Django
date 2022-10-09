@@ -30,6 +30,7 @@ urlpatterns=[
     path('edit-student/<int:id>', AdmineditStudent.as_view()),
     path('all-student', AdminStudentList.as_view()),
     path('delete-student', DeleteStudent.as_view()),
+    path('student-detail/<int:id>', SingleStudent.as_view()),
 
 
     #Admin Employee

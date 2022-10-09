@@ -1,43 +1,105 @@
-import axios from "axios";
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { MdDeleteForever } from "react-icons/md";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 import { useEffect } from "react";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { MdDeleteForever } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { data } from "autoprefixer";
 
-const StudentInformationComp = () => {
+const EditStudentComponent = () => {
+  const { id } = useParams();
   const [list, setList] = useState([]);
-
-  const [student_name, setStudent_name] = useState("");
-  const [class_number, setClass_number] = useState("");
-  const [reg_number, setReg_number] = useState("");
-  const [selectedImage, setSelectedImage] = useState();
   const [startDate, setStartDate] = useState(null);
-  const [newDob, setNewDob] = useState(null);
   const [newstartDate, setNewStartDate] = useState(null);
-  const [admDate, setAdmDate] = useState("");
-  const [gender, setGender] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [Address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [father, setFather] = useState("");
-  const [mother, setMother] = useState("");
-  const [father_id, setFather_id] = useState("");
-  const [mother_id, setMother_id] = useState("");
-  const [father_job, setFather_job] = useState("");
-  const [mother_job, setMother_job] = useState("");
-  const [father_mob, setFather_mob] = useState("");
-  const [mother_mob, setMother_mob] = useState("");
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const [detail, setDetail] = useState("");
+  const BASE_URL = "http://127.0.0.1:8000";
+  let [selectedImage, setSelectedImage] = useState();
 
+  const [user, setUser] = useState({
+    student_name: "",
+    reg_number: "",
+    gender: "",
+    mobile: "",
+    image:"",
+    Address: "",
+    email: "",
+    country: "",
+    state: "",
+    city: "",
+    pincode: "",
+    father: "",
+    mother: "",
+    father_id: "",
+    mother_id: "",
+    father_job: "",
+    mother_job: "",
+    father_mob: "",
+    mother_mob: "",
+  });
 
+  const {
+    student_name,
+    reg_number,
+    gender,
+    mobile,
+    Address,
+    email,
+    country,
+    state,
+    city,
+    pincode,
+    father,
+    mother,
+    father_id,
+    mother_id,
+    father_job,
+    mother_job,
+    father_mob,
+    mother_mob,
+  } = user;
+
+  const onInputChnage = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+  useEffect(() => {
+    const loadUser = async () => {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/student-detail/${id}`
+      );
+      setDetail(response.data);
+      setUser(response.data);
+    };
+    loadUser();
+  }, [id]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    axios.post(`http://127.0.0.1:8000/edit-student/${id}`, {
+      student_name: student_name,
+      reg_number: reg_number,
+      gender: gender,
+      mobile: mobile,
+      Address: Address,
+      email: email,
+      country: country,
+      state: state,
+      city: city,
+      pincode: pincode,
+      father: father,
+      mother: mother,
+      father_id: father_id,
+      mother_id: mother_id,
+      father_job: father_job,
+      mother_job: mother_job,
+      father_mob: father_mob,
+      mother_mob: mother_mob,
+    });
+    console.log("POST", user);
+    navigate("/student");
+  };
 
   useEffect(() => {
     const classList = async () => {
@@ -46,71 +108,6 @@ const StudentInformationComp = () => {
     };
     classList();
   }, []);
-
-  console.log(('LIST', list));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post(
-        "http://127.0.0.1:8000/add-student",
-        {
-          student_name: student_name,
-          class_number: class_number,
-          reg_number: reg_number,
-          image: selectedImage,
-          admission_date: admDate,
-          date_of_birth: newDob,
-          gender: gender,
-          mobile: mobile,
-          Address: Address,
-          email: email,
-          country: country,
-          state: state,
-          city: city,
-          pincode: pincode,
-          father: father,
-          mother: mother,
-          father_id: father_id,
-          mother_id: mother_id,
-          father_job: father_job,
-          mother_job: mother_job,
-          father_mob: father_mob,
-          mother_mob: mother_mob,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        if (response.status === 201) {
-            navigate('/student')
-          alert("student added");
-        } else {
-          alert("UNSUCCESSFUL");
-        }
-      });
-  };
-
-  useEffect(() => {
-    if (startDate) {
-      let date = startDate;
-      let newDate = date.toISOString().slice(0, 10);
-      setNewDob(newDate);
-      console.log("NEW DOB", newDob);
-    }
-  }, [startDate, newDob]);
-
-  useEffect(() => {
-    if (newstartDate) {
-      let date = newstartDate;
-      let newDate = date.toISOString().slice(0, 10);
-      setAdmDate(newDate);
-      console.log("NEW ADMISSION", admDate);
-    }
-  }, [newstartDate, admDate]);
 
   const imageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -123,8 +120,9 @@ const StudentInformationComp = () => {
   };
 
   return (
-    <div className="">
-      <form onSubmit={handleSubmit}>
+    <div>
+      EditStudentComponent
+      <form onSubmit={onSubmit}>
         <div className="lg:grid lg:grid-cols-2">
           <div className="Student-Info-grid">
             <header className="bg-blue-500 py-1 w-full flex justify-center text-white">
@@ -156,7 +154,7 @@ const StudentInformationComp = () => {
                   placeholder="Student Name"
                   name="student_name"
                   value={student_name}
-                  onChange={(e) => setStudent_name(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
               <div className="mb-3 xl:w-auto">
@@ -183,7 +181,7 @@ const StudentInformationComp = () => {
                   placeholder="Registration No"
                   name="reg_number"
                   value={reg_number}
-                  onChange={(e) => setReg_number(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -199,6 +197,7 @@ const StudentInformationComp = () => {
                           text-sm
                           font-Poppins
                           text-gray-500
+                          
                         
                           bg-white bg-clip-padding bg-no-repeat
                           border border-solid border-gray-300
@@ -208,20 +207,11 @@ const StudentInformationComp = () => {
                           m-0
                           focus:bg-white  focus:outline-none"
                   aria-label=""
-                  onChange={(e) => setClass_number(e.target.value)}
+                  disabled={true}
                 >
-                  <option defaultValue="" hidden className="">
-                    --select class--
+                  <option className="text-base text-black">
+                    {detail.class_number}
                   </option>
-                  {list.map((data, id) => (
-                    <option
-                      key={id}
-                      className="text-base text-black"
-                      value={data.id}
-                    >
-                      {data.class_number}
-                    </option>
-                  ))}
                 </select>
               </div>
 
@@ -250,7 +240,7 @@ const StudentInformationComp = () => {
                     placeholder="Mobile"
                     name="mobile"
                     value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
+                    onChange={(e) => onInputChnage(e)}
                   />
                 </div>
               </div>
@@ -267,12 +257,13 @@ const StudentInformationComp = () => {
         
         font-Poppins
         text-gray-700
-        bg-white bg-clip-padding
+        bg-white  bg-clip-padding
         border border-solid border-gray-300
         rounded
         transition
         ease-in-out
         m-0
+      
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               >
                 <DatePicker
@@ -287,6 +278,7 @@ const StudentInformationComp = () => {
                   placeholderText="Date of birth"
                   className="w-full text-sm"
                   dateFormat={"dd-MM-yyyy"}
+                  disabled
                 />
               </div>
               <div
@@ -319,8 +311,8 @@ const StudentInformationComp = () => {
                   wrapperClassName="w-full"
                   isClearable={true}
                   placeholderText="Admission Date"
-                  name="admission_date"
                   dateFormat={"dd-MM-yyyy"}
+                  disabled
                 />
               </div>
             </div>
@@ -350,7 +342,7 @@ const StudentInformationComp = () => {
                   placeholder="Gender"
                   name="gender"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
 
@@ -378,7 +370,7 @@ const StudentInformationComp = () => {
                   placeholder="Email"
                   name="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -407,7 +399,7 @@ const StudentInformationComp = () => {
                   placeholder="Country"
                   name="country"
                   value={country}
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
 
@@ -435,7 +427,7 @@ const StudentInformationComp = () => {
                   placeholder="State"
                   name="state"
                   value={state}
-                  onChange={(e) => setState(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -465,7 +457,7 @@ const StudentInformationComp = () => {
                   placeholder="City"
                   name="city"
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
 
@@ -493,19 +485,19 @@ const StudentInformationComp = () => {
                   placeholder="Pincode"
                   name="pincode"
                   value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
 
             <div className="addres-box mx-2 mb-3">
               <textarea
-                name="address"
+                name="Address"
                 rows="2"
                 placeholder="Address"
                 className="border border-solid border-gray-300 w-full resize-none rounded placeholder:text-sm px-3 py-1"
                 value={Address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => onInputChnage(e)}
               ></textarea>
             </div>
 
@@ -533,20 +525,27 @@ const StudentInformationComp = () => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   id="formFileSm"
                   type="file"
+                  name="selectedImage"
                 />
               </div>
 
               <div className="w-44 h-44 border-2  flex  ">
                 <div className="overflow-hidden relative">
-                  {selectedImage && (
-                    <div className="">
+                  <div className="">
+                    {!selectedImage ? (
+                      <img
+                        className=""
+                        src={`${BASE_URL}${detail.image}`}
+                        alt={""}
+                      />
+                    ) : (
                       <img
                         className=""
                         src={URL.createObjectURL(selectedImage)}
                         alt={""}
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
               {selectedImage ? (
@@ -595,7 +594,7 @@ const StudentInformationComp = () => {
                   placeholder="father Name"
                   name="father"
                   value={father}
-                  onChange={(e) => setFather(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
               <div className=" xl:w-auto">
@@ -622,7 +621,7 @@ const StudentInformationComp = () => {
                   placeholder="Father ID"
                   name="father_id"
                   value={father_id}
-                  onChange={(e) => setFather_id(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -652,7 +651,7 @@ const StudentInformationComp = () => {
                   placeholder="Mother Name"
                   name="mother"
                   value={mother}
-                  onChange={(e) => setMother(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
               <div className="mb-3 xl:w-auto">
@@ -679,7 +678,7 @@ const StudentInformationComp = () => {
                   placeholder="Mother ID"
                   name="mother_id"
                   value={mother_id}
-                  onChange={(e) => setMother_id(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -708,7 +707,7 @@ const StudentInformationComp = () => {
                   placeholder="Father Job"
                   name="father_job"
                   value={father_job}
-                  onChange={(e) => setFather_job(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
               <div className="mb-3 xl:w-auto">
@@ -735,7 +734,7 @@ const StudentInformationComp = () => {
                   placeholder="Mother Job"
                   name="mother_job"
                   value={mother_job}
-                  onChange={(e) => setMother_job(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -765,7 +764,7 @@ const StudentInformationComp = () => {
                   placeholder="Father Mobile"
                   name="father_mob"
                   value={father_mob}
-                  onChange={(e) => setFather_mob(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
               <div className="mb-3 xl:w-auto">
@@ -792,7 +791,7 @@ const StudentInformationComp = () => {
                   placeholder="Mother Mobile"
                   name="mother_mob"
                   value={mother_mob}
-                  onChange={(e) => setMother_mob(e.target.value)}
+                  onChange={(e) => onInputChnage(e)}
                 />
               </div>
             </div>
@@ -812,4 +811,4 @@ const StudentInformationComp = () => {
   );
 };
 
-export default StudentInformationComp;
+export default EditStudentComponent;

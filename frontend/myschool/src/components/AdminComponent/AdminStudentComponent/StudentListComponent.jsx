@@ -3,19 +3,20 @@ import { FiSearch } from "react-icons/fi";
 import { BsPlusLg } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+
 const StudentListComponent = () => {
   const [list, setList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/all-student")
       .then((response) => setList(response.data));
   }, []);
-  console.log("LIST", list);
 
   return (
     <div className="mx-10">
@@ -72,7 +73,7 @@ const StudentListComponent = () => {
         {list.map((data, id) => (
           <div
             key={id}
-            className="student-list w-36 h-44 rounded-md relative shadow-xl bg-white"
+            className="student-list w-44 h-48 rounded-md relative shadow-xl bg-white"
           >
             <div className="flex flex-col items-center relative top-3 ">
               <div className="flex justify-center rounded-full w-20 h-20 mb-3 border  overflow-hidden bg-slate-200">
@@ -88,8 +89,11 @@ const StudentListComponent = () => {
               <div className="text-xs">{data.student_name}</div>
               <div className="text-xs">{data.reg_number}</div>
             </div>
-            <div className="student-crud flex gap-1 left-11 absolute bottom-1">
-              <div className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-blue-500">
+            <div className="student-crud flex gap-1 left-[3.5em] absolute bottom-1">
+              <div
+                className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-blue-500 cursor-pointer"
+                onClick={() => navigate(`edit-student/${data.id}`)}
+              >
                 <BsPencil className="text-white" />
               </div>
               <div className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-red-500">

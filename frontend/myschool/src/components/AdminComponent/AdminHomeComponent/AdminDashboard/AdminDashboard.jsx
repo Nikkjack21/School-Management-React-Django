@@ -5,23 +5,29 @@ import Marquee from "react-fast-marquee";
 import WelcomeDash from "../../OtherComponents/WelcomeDash";
 import { useContext } from "react";
 import AuthContext from "../../../../context/AuthContext";
+import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import AdminCharts from "../../OtherComponents/AdminCharts";
 
 const AdminDashboard = () => {
-  const {user} = useContext(AuthContext)
+  const {admin} = useContext(AuthContext)
 
-  console.log('USER', user);
+useEffect(()=>{
+  if(admin){
+    <Navigate to={'/admin'}/>
+  }
+},[admin])
+
   return (
     <div >
-      <h1 className="text-blue-600    ">This is admin Dashboard</h1>
+      <h1 className="text-blue-600    "> </h1>
       <Marquee
         className="font-Poppins mb-4 mt-4 md:text-base text-xs  "
         gradient={false}
         pauseOnClick={true}
         speed={60}
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-        pariatur velit. In magnam tempore id nemo quis dignissimos impedit
-        temporibus? .
+      This line will show you if any lates updates regarding school or from other major sources .
       </Marquee>
       <div className="margin-adjust md:mx-10 ">
         <div className="grid md:grid-cols-4 gap-4   ">
@@ -74,8 +80,8 @@ const AdminDashboard = () => {
           <div className="welcome-left w-full">
             
               <WelcomeDash />
-              <div className="left-chart">
-
+              <div className="left-chart mt-5">
+                <AdminCharts/>
               </div>
             
           </div>

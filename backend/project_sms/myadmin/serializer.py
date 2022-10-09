@@ -1,5 +1,5 @@
-from dataclasses import fields
-from rest_framework.serializers import ModelSerializer, MultipleChoiceField, ListField
+
+from rest_framework.serializers import ModelSerializer, DateField
 from myadmin.models import *
 
 

@@ -8,7 +8,7 @@ import string
     
 def name_gen():
     characters  = list('abcdefghijklmnopqrstuv1234567890')
-    length      = 10
+    length      = 6
     the_name    = ''
     for x in range(length):
         the_name += random.choice(characters)
@@ -16,11 +16,13 @@ def name_gen():
 
 def pass_gen():
     characters  = list('abcdefghijklmnopqrstuv1234567890')
-    length      = 10
+    length      = 6
     the_pass    = ''
     for x in range(length):
         the_pass += random.choice(characters)
     return the_pass
+
+
     
 
 
@@ -54,23 +56,17 @@ class AddSubject(models.Model):
 
 
 class AddStudent(models.Model):
-    GENDER = (
 
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('other', 'Other')
-    )
     student_name       = models.CharField(max_length=25)
     class_number       = models.ForeignKey(AddClass, on_delete=models.CASCADE, blank=True)
     reg_number         = models.IntegerField(default=random_reg_id)
-    image              = models.ImageField(upload_to='photos/student', blank=True)
-    admission_date     = models.DateField(null=True)
-    date_of_birth      = models.DateField(null=True)
-    gender             = models.CharField(max_length=15, choices=GENDER, null=True)
+    image              = models.ImageField(upload_to='photos/student', blank=True, max_length=3500,null=True)
+    admission_date     = models.DateField(null=True,blank=True)
+    date_of_birth      = models.DateField(null=True,blank=True,)
+    gender             = models.CharField(max_length=15, null=True)
     mobile             = models.IntegerField()
     Address            = models.TextField(max_length=300)
-    religion           = models.CharField(max_length=25, null=True, blank=True)
-    cast               = models.CharField(max_length=25, null=True, blank=True)
+
     email              = models.EmailField(max_length=50)
     country            = models.CharField(max_length=30)
     state              = models.CharField(max_length=25)
@@ -102,29 +98,23 @@ class IdCards(models.Model):
     
 
 class AddEmployee(models.Model):
-    GENDER = (
-        ('None', 'Choose Your gender'),
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('other', 'Other')
-    )
+
     emp_name           = models.CharField(max_length=25)
     mobile             = models.IntegerField()
     emp_type           = models.CharField(max_length=25)
-    image              = models.ImageField(upload_to='photos/employee', blank=True)
+    image              = models.ImageField(upload_to='photos/employee', null=True, blank=True)
     joining_date       = models.DateField(null=True)
     salary             = models.IntegerField()
-    father_name        = models.CharField(max_length=25, null=True)
-    gender             = models.CharField(max_length=10, choices=GENDER, null=True)
+    father_name        = models.CharField(max_length=25, null=True, blank=True)
+    gender             = models.CharField(max_length=10,  null=True, blank=True)
     experience         = models.CharField(max_length=25)
-    religion           = models.CharField(max_length=25, null=True)
-    cast               = models.CharField(max_length=25, null=True)
+    religion           = models.CharField(max_length=25, null=True, blank=True)
+    cast               = models.CharField(max_length=25, null=True, blank=True)
     email              = models.EmailField(max_length=50)
     Address            = models.TextField(max_length=300)
-    date_of_birth      = models.DateField(null=True)
+    date_of_birth      = models.DateField(null=True,blank=True)
     username           = models.CharField(max_length=15, default=name_gen)
     password           = models.CharField(max_length=15, default=pass_gen)
-
 
 
     def __str__(self):

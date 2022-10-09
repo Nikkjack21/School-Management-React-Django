@@ -38,12 +38,12 @@ console.log('ADD-CLASS-TOKEN', token.access);
   };
 
   return (
-    <div>
+    <div className="">
       <h1>Place to add class</h1>
-      <div className="container  relative mx-28 lg:mx-[30%] lg:my-16 my-20  border-2 w-96 h-96 ">
+      <div className="container shadow-lg relative mx-28 lg:mx-[30%] lg:my-16 my-20 border w-96 h-96  ">
         <form onSubmit={handleSubmit}>
-          <div>
-            <header className="w-full h-auto px-3 py-3 flex justify-center text-white font-bold text-2xl bg-gradient-to-r from-red-500  to-red-400 ">
+          <div className="">
+            <header className="w-full h-auto px-3 backdrop-filter  py-3 flex rounded-sm justify-center text-white font-bold text-2xl bg-gradient-to-r from-red-500  to-red-400 ">
               ADD CLASS
             </header>
             <div className="mx-10 mt-[3em]">
@@ -73,8 +73,8 @@ console.log('ADD-CLASS-TOKEN', token.access);
                   name="class_grade"
                 />
               </div>
-              <div className="mt-7 flex justify-center">
-                <button className="px-4 py-2 w-36 rounded text-white font-medium bg-sky-400">
+              <div className="mt-7 flex justify-center ">
+                <button className="px-4 py-2 w-36 rounded text-white font-medium bg-sky-400 hover:bg-sky-500">
                   SUBMIT
                 </button>
               </div>

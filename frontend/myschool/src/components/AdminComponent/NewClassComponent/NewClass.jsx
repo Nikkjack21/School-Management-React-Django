@@ -64,14 +64,14 @@ const NewClass = () => {
   };
 
   return (
-    <div className="mx-10">
+    <div className="">
       <h1>Class</h1>
       <div className="classContainer-main flex gap-4 flex-wrap ">
         <div
-          className="bg-[#fe838e]  rounded-md w-56 h-28
+          className="bg-[#fe838e] hover:drop-shadow-xl rounded-md w-56 h-28
            text-white"
         >
-          <Link to={"/addclass"}>
+          <Link to={"addclass"}>
             <p className=" relative top-10 left-[6.5em] w-0 ">
               <BsPlusLg />
             </p>

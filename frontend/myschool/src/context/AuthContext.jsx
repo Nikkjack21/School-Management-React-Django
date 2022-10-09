@@ -14,7 +14,8 @@ export default AuthContext
 export const AuthProvider = ({children})=>{
 
 const [authToken, setAuthToken] = useState(()=>localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null)
-const [user, setUser]           = useState(()=>localStorage.getItem('authToken') ? jwt_decode(localStorage.getItem('authToken')) : null)
+const [user, setUser]           = useState(null)
+const [admin, setAdmin]           = useState(()=>localStorage.getItem('authToken') ? jwt_decode(localStorage.getItem('authToken')) : null)
 
 const navigate = useNavigate()
 
@@ -22,7 +23,7 @@ const navigate = useNavigate()
 
 const adminLogout =useCallback(()=>{
     setAuthToken(null)
-    setUser(null)
+    setAdmin(null)
     localStorage.removeItem('authToken')
     localStorage.removeItem('access_token')
     navigate('/')
@@ -41,7 +42,7 @@ let updateToken =  useCallback(async ()=>{
     const data = await response.json()
     if(response.status===200){
         setAuthToken(data); 
-        setUser(jwt_decode(data.access))
+        setAdmin(jwt_decode(data.access))
         localStorage.setItem('authToken', JSON.stringify(data)) 
     }else{
         adminLogout()
@@ -66,7 +67,9 @@ useEffect(()=>{
 
 const ContextData = {
     user:user,
+    admin:admin,
     authToken:authToken,
+    setAdmin:setAdmin,
     setUser:setUser,
     setAuthToken:setAuthToken,
     adminLogout:adminLogout,

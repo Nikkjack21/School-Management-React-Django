@@ -41,7 +41,7 @@ const AdminSubject = () => {
           className="add-box bg-[#fe838e]  rounded-md w-56 h-28
            text-white"
         >
-          <Link to={"/add-subject"}>
+          <Link to={"add-subject"}>
             <p className=" relative top-10 left-[6.5em] w-0 ">
               <BsPlusLg />
             </p>

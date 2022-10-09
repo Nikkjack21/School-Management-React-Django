@@ -103,20 +103,22 @@ const SideDrawer = ({ children }) => {
           </Menu>
         </div>
       </nav>
-      <div className="sidebarNav flex ">
-        <div className=" hidden lg:block scrollbar  lg:w-[14.5em] h-screen bg-[#ffffff] border-x-2 shadow-lg">
+      <div className="sidebarNav flex h-screen">
+        <div className=" hidden lg:block scrollbar lg:w-[14.5em] h-screen bg-[#ffffff] border-x-2 shadow- mt-5">
           {SidebarData.map((data, id) => (
-            <div key={id} className="flex mt-5 hover:text-[#2989f7] w-5">
-              <div onClick={()=> { navigate(data.path)} } className=" mt-1 ml-5 mr-2  ">{data.icon}</div>
-              <button onClick={()=> { navigate(data.path)} } className="text-sm  text-[#555353] font-Poppins hover:text-sky-500  ">
+
+            <div key={id} className=" flex  hover:bg-blue-500 hover:rounded-md hover:text-white group hover:drop-shadow-2xl hover:font-semibold  h-12">
+              <button onClick={()=> { navigate(data.path)} } className="group-hover:animate-pulse group-hover:scale-125 flex items-center ml-5 mr-2 group-hover:mr-4 ">{data.icon}</button>
+              <button onClick={()=> { navigate(data.path)} } className="text-sm group-hover:scale-110  font-Poppins   ">
                 {data.name}
               </button>
             </div>
+              
           ))}
         </div>
 
-        <div className="bg-[#f6f7fb] h-screen w-full">
-          <h1>{children} </h1>
+        <div className="bg-[#f6f7fb] h-full w-full">
+          {children} 
         </div>
       </div>
     </div>

@@ -1,12 +1,12 @@
 import React from 'react'
-import NewClass from '../../../../components/AdminComponent/NewClassComponent/NewClass'
+import AdminClassComponent from '../../../../components/AdminComponent/NewClassComponent/AdminClassComponent'
 import SideDrawer from '../../../../components/AdminComponent/Sidebar&Navbar/SideDrawer'
 
 const AdminClassPages = () => {
   return (
     <div>
         <SideDrawer>
-            <NewClass/>
+            <AdminClassComponent/>
         </SideDrawer>
     </div>
   )

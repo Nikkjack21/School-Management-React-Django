@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.
 
@@ -43,7 +44,6 @@ class AllClassList(APIView):
 
     def get(self, request):
         hey = request.user
-        print("HEYYYYY", hey)
         classess = AddClass.objects.all()
         serializer = ClassSerializer(classess, many=True)
         if serializer:
@@ -156,25 +156,45 @@ class AdminStudentList(generics.ListAPIView):
     serializer_class = StudentSerializer
 
 
+
+
 class AdminAddStudent(APIView):
+    parser_classes=[MultiPartParser, FormParser]
     def post(self, request):
         student = StudentSerializer(data=request.data)
+        data=request.data
+        print('Image', data['image'])
         if student.is_valid():
             student.save()
             return Response(student.data, status=status.HTTP_201_CREATED)
         return Response(400)
 
 
+
+class SingleStudent(APIView):
+    def get(self, request, id):
+        student = AddStudent.objects.get(id=id)
+        serializer = StudentSerializer(student)
+        if serializer:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(404)
+
+
+
 class AdmineditStudent(APIView):
     def post(self, request, id):
+        data = request.data
         student = AddStudent.objects.get(id=id)
         serializer = StudentSerializer(
             instance=student, data=request.data, partial=True
         )
+        print('STUDENT', data)
         if serializer.is_valid():
+            print('SERIALIZER IS VALID')
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(404)
+        print('ERROR')
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteStudent(APIView):
@@ -199,6 +219,7 @@ class AdminEmployeeList(generics.ListAPIView):
 
 class AdminAddEmployee(generics.CreateAPIView):
     serializer_class = EmployeeSerializer
+    parser_classes=[MultiPartParser, FormParser]
 
 
 class AdminEditEmployee(APIView):

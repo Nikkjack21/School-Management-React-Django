@@ -8,10 +8,24 @@ module.exports = {
       fontFamily:{
         Poppins: ['Poppins']
      },
+     animation: {
+      shine: "shine 1s",
     },
+    keyframes: {
+      shine: {
+        "100%": { left: "125%" },
+      },
+    },
+    },
+    backdropFilter: {
+      'none': 'none',
+      'blur': 'blur(20px)',
+    },
+
   },
+  
   plugins: [
 
-    require('tailwind-scrollbar')({ nocompatible: true }),
+    require('tailwind-scrollbar')({ nocompatible: true }),('tailwindcss-filters')
   ],
 }
