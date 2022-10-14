@@ -1,17 +1,22 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AddClass = () => {
   const navigate = useNavigate();
   const [classNum, setClassNum] = useState("");
   const [grade, setGrade] = useState("");
+  const [teacher, setTeacher] = useState([]);
+  const [selectTeacher, setSelectTeacher] = useState("");
+
   const token = localStorage.getItem("authToken")
     ? JSON.parse(localStorage.getItem("authToken"))
     : null;
-console.log('ADD-CLASS-TOKEN', token.access);
+
+  console.log("teacher", selectTeacher);
+
   const handleSubmit = (e) => {
-    console.log("CLICKED");
     e.preventDefault();
     axios
       .post(
@@ -19,23 +24,33 @@ console.log('ADD-CLASS-TOKEN', token.access);
         {
           class_number: classNum,
           class_grade: grade,
+          class_teacher: selectTeacher,
         },
         {
           headers: {
-            "Authorization": `Bearer ${token.access}`
+            Authorization: `Bearer ${token.access}`,
           },
         }
       )
       .then((response) => {
-        console.log("RESPONSE IN ADD", response);
-        if (response.status === 201) {
+        if (response.status === 400) {
+          console.log('iiiiiffffffffff');
           navigate("/class");
           alert("Class Added");
         } else {
+          console.log('elseeeeeeeeeeeeee');
+          navigate("/class");
           alert("something went wrong");
         }
       });
   };
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/employee/all-teachers")
+      .then((response) => setTeacher(response.data));
+  }, []);
+  console.log(teacher);
 
   return (
     <div className="">
@@ -48,9 +63,7 @@ console.log('ADD-CLASS-TOKEN', token.access);
             </header>
             <div className="mx-10 mt-[3em]">
               <div className="mb-5">
-                <label className="text-sm text-gray-600" htmlFor="">
-                  Class Number:
-                </label>
+                <label className="text-sm text-gray-600">Class Number:</label>
                 <input
                   value={classNum}
                   onChange={(e) => setClassNum(e.target.value)}
@@ -60,6 +73,26 @@ console.log('ADD-CLASS-TOKEN', token.access);
                   name="class_number"
                 />
               </div>
+
+              <div>
+                <label className="text-sm text-gray-600" htmlFor="">
+                  Class Teacher:
+                </label>
+                <select
+                  onChange={(e) => setSelectTeacher(e.target.value)}
+                  className="w-full px-3 py-2 mb-3 text-xs bg-white border-2 border-gray-300"
+                >
+                  <option className="text-gray-500" hidden>
+                    Select teacher
+                  </option>
+                  {teacher.map((item, id) => (
+                    <option key={id} value={item.id}>
+                      {item.teacher_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className="text-sm text-gray-600" htmlFor="">
                   Class Grade:
@@ -73,6 +106,7 @@ console.log('ADD-CLASS-TOKEN', token.access);
                   name="class_grade"
                 />
               </div>
+
               <div className="mt-7 flex justify-center ">
                 <button className="px-4 py-2 w-36 rounded text-white font-medium bg-sky-400 hover:bg-sky-500">
                   SUBMIT

@@ -34,7 +34,7 @@ export const SidebarData = [
   },
   {
     name: "Employees",
-    path:"/employee",
+    path:"/admin-employee",
     icon:<MdWorkOutline/>
   },
   {

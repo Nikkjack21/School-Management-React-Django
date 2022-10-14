@@ -45,7 +45,7 @@ const AddEmployee = () => {
       const status = response.status
       console.log('satus', status);
       if (status === 201){
-        navigate('/employee')
+        navigate('/admin-employee')
       }else{
         alert('WRONGGG')
       }

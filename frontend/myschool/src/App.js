@@ -16,6 +16,10 @@ import EditStudentComponent from "./components/AdminComponent/AdminStudentCompon
 import AdminEmployeePage from "./pages/Admin/Home/AdminEmployee/AdminEmployeePage";
 import EmployeeLits from "./components/AdminComponent/AdminEmployeeComponent/EmployeeLits";
 import AddEmployee from "./components/AdminComponent/AdminEmployeeComponent/AddEmployee";
+import EmpSideDrawer from "./components/EmployeeComponent/EmpSideBar/EmpSideDrawer";
+import EmployeeDashboard from "./components/EmployeeComponent/EmpDashBboardComponent/EmployeeDashboard";
+import EmployeeAddStudent from "./components/EmployeeComponent/EmpAddStudentComp/EmployeeAddStudent";
+import AddStudentComponent from "./components/EmployeeComponent/EmpAddStudentComp/AddStudentComponent";
 
 function App() {
   return (
@@ -67,11 +71,23 @@ function App() {
             <Route path="add-student" element={<StudentFormComponent />} />
             <Route path="edit-student/:id" element={<EditStudentComponent/>}/>
           </Route>
-          <Route path="/employee" element={<AdminEmployeePage/>}>
+          <Route path="/admin-employee" element={<AdminEmployeePage/>}>
             <Route path="" element={<EmployeeLits/>}/>
             <Route path="add-employee" element={<AddEmployee/>}/>
 
           </Route>
+
+          <Route path="" element={<EmpSideDrawer/>}>
+            
+          <Route path='/employee-home'  element={<EmployeeDashboard/>}/>
+            <Route path='/employee-student' element={<EmployeeAddStudent/>}>
+
+            </Route>
+              <Route path="/employee-add-student" element={<AddStudentComponent/>}/>
+          </Route>
+
+            
+
         </Routes>
       </AuthProvider>
     </div>

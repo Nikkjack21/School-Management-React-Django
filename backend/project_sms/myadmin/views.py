@@ -16,6 +16,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.serializers import ValidationError
+from django.db.models import Q
 
 # Create your views here.
 
@@ -29,14 +31,24 @@ class AdminDashboard(APIView):
 
 class AddClassView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
-
     def post(self, request):
-        print("test", request.user)
-        serializer = ClassSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        data = request.data
+        cls_num = data["class_number"]
+        grade = data["class_grade"]
+        cls_teacher = Teacher.objects.get(id=data["class_teacher"])
+        check = AddClass.objects.filter(
+            Q(class_number__icontains=cls_num)
+            | Q(class_teacher__teacher_name__icontains=cls_teacher)
+            | Q(class_number__iexact="class ")
+        )
+        if check:
+            raise ValidationError("Data already exist")
+        else:
+            addClass = AddClass.objects.create(
+                class_number=cls_num, class_grade=grade, class_teacher=cls_teacher
+            )
+        serializer = ClassSerializer(addClass)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class AllClassList(APIView):
@@ -156,19 +168,17 @@ class AdminStudentList(generics.ListAPIView):
     serializer_class = StudentSerializer
 
 
-
-
 class AdminAddStudent(APIView):
-    parser_classes=[MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]
+
     def post(self, request):
         student = StudentSerializer(data=request.data)
-        data=request.data
-        print('Image', data['image'])
+        data = request.data
+        print("Image", data["image"])
         if student.is_valid():
             student.save()
             return Response(student.data, status=status.HTTP_201_CREATED)
         return Response(400)
-
 
 
 class SingleStudent(APIView):
@@ -180,7 +190,6 @@ class SingleStudent(APIView):
         return Response(404)
 
 
-
 class AdmineditStudent(APIView):
     def post(self, request, id):
         data = request.data
@@ -188,12 +197,12 @@ class AdmineditStudent(APIView):
         serializer = StudentSerializer(
             instance=student, data=request.data, partial=True
         )
-        print('STUDENT', data)
+        print("STUDENT", data)
         if serializer.is_valid():
-            print('SERIALIZER IS VALID')
+            print("SERIALIZER IS VALID")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        print('ERROR')
+        print("ERROR")
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -219,7 +228,7 @@ class AdminEmployeeList(generics.ListAPIView):
 
 class AdminAddEmployee(generics.CreateAPIView):
     serializer_class = EmployeeSerializer
-    parser_classes=[MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]
 
 
 class AdminEditEmployee(APIView):

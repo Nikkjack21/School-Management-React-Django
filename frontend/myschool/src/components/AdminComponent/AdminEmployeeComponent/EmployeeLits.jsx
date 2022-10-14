@@ -17,6 +17,9 @@ const EmployeeLits = () => {
   }, []);
   console.log("EMP", list);
 
+
+
+
   return (
     <div>
       <div className="flex mt-5 ">
@@ -39,9 +42,9 @@ const EmployeeLits = () => {
         </div>
         </Link>
         {list.map((item, id) => (
-          <div>
+          <div key={id}>
             <div
-              key={id}
+              
               className="flex border w-48 flex-col justify-center hover:scale-105  shadow-lg rounded-xl "
             >
               <img

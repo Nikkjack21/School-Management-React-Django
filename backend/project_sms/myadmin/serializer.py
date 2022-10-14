@@ -50,7 +50,7 @@ class IdCardSerializer(ModelSerializer):
 
 class StudAttendSerializer(ModelSerializer):
     class Meta:
-        model = studAttendance
+        model = StudAttendance
         fields = "__all__"
 
 
