@@ -24,9 +24,13 @@ class EmployeeLogin(APIView):
 
 
 
+
+
+
 class AddStudentByTeacher(APIView):
     def post(self, request):
         student = StudentSerializer(data=request.data)
+        print(request.data)
         if student.is_valid():
             student.save()
             return Response(student.data, status=status.HTTP_201_CREATED)
