@@ -2,6 +2,7 @@ from functools import partial
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
+from employee.serializer import TeacherSerializer
 from myadmin.models import *
 from myadmin.serializer import (
     ClassSerializer,
@@ -31,6 +32,7 @@ class AdminDashboard(APIView):
 
 class AddClassView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
+
     def post(self, request):
         data = request.data
         cls_num = data["class_number"]
@@ -253,3 +255,76 @@ class DeleteEmployee(APIView):
 
 
 # ADMIN EMPLOYEE VIEWS ENDS
+
+
+# ADMIN TEACHER VIEW BEGIN
+class TeachersList(generics.ListAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+
+class AddTeacher(APIView):
+    def post(self, request):
+        data = request.data
+        cls = AddClass.objects.get(id=data["class_number"])
+
+        username = data["username"]
+        email = data["email"]
+        password = data["password"]
+        mobile = data["mobile"]
+        post = data["post_name"]
+        user = Account.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+        )
+        user.is_teacher = True
+        user.save()
+        teacher = Teacher.objects.create(
+            class_number=cls,
+            user=user,
+            mobile=mobile,
+            post_name=post,
+            salary=data["salary"],
+            join_date=data["join_date"],
+            date_of_birth=data["date_of_birth"],
+            address=data["address"],
+            experience=data["experience"],
+            image=data["image"],
+        )
+        teacher.save()
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class EditTeacher(APIView):
+    def post(self, request, id):
+        print(request.user)
+        data = request.data
+        user = Account.objects.get(id=data.get("user"))
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        username = data.get("username")
+        email = data.get("email")
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if email:
+            user.email = email
+        if username:
+            user.username = username
+        user.save()
+        instance = Teacher.objects.get(id=id)
+        serializer = TeacherSerializer(
+            instance=instance, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ADMIN TEACHER VIEW ENDS

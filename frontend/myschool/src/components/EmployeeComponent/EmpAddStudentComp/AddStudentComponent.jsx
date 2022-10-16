@@ -4,14 +4,19 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const AddStudentComponent = () => {
   const [image, setImage] = useState();
   const inpRef = useRef();
   const [list, setList] = useState([]);
+  const navigate = useNavigate()
 
   const [user, setUser] = useState({
-    student_name: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
     class_number: "",
     reg_number: "",
     admission_date: "",
@@ -33,7 +38,11 @@ const AddStudentComponent = () => {
   });
 
   const {
-    student_name,
+   
+    first_name,
+    last_name,
+    username,
+    password,
     reg_number,
     class_number,
     date_of_birth,
@@ -74,7 +83,14 @@ const AddStudentComponent = () => {
       })
       .then((response) => {
         console.log("RESPONSE", response);
-      });
+        if(response.status === 201){
+          navigate('/employee-student')
+        }
+        
+      }).catch(error=>{
+        alert(error.response)
+        console.log('Error', error.response);
+      })
   };
 
   const imageChange = (e) => {
@@ -110,14 +126,22 @@ const AddStudentComponent = () => {
       <form onSubmit={handleSubmit}>
         <div className="mx-10">
           {/* first row */}
-          <div className="flex justify-evenly mb-3 gap-2">
+          <div className="flex mx-3  justify-between mb-3 gap-2">
             <input
               type="text"
-              name="student_name"
-              value={student_name}
+              name="first_name"
+              value={first_name}
               onChange={(e) => inputChange(e)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
-              placeholder="Student Name"
+              placeholder="First Name"
+            />
+            <input
+              type="text"
+              name="last_name"
+              value={last_name}
+              onChange={(e) => inputChange(e)}
+              className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+              placeholder="Last Name"
             />
             <input
               type="number"
@@ -126,6 +150,24 @@ const AddStudentComponent = () => {
               onChange={(e) => inputChange(e)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Registration No."
+            />
+          </div>
+          <div className="flex mx-3  justify-between mb-3 gap-2">
+            <input
+              type="text"
+              name="username"
+              value={username}
+              onChange={(e) => inputChange(e)}
+              className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+              placeholder="User Name"
+            />
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => inputChange(e)}
+              className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+              placeholder="Password"
             />
             <select
               name="class_number"

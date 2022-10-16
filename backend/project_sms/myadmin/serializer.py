@@ -1,5 +1,6 @@
 
 from rest_framework.serializers import ModelSerializer, DateField
+from customuser.serializer import AccountSerializer
 from myadmin.models import *
 
 
@@ -25,6 +26,7 @@ class SubjectSerializer(ModelSerializer):
 
 
 class StudentSerializer(ModelSerializer):
+    student_name=AccountSerializer()
     class Meta:
         model = AddStudent
         fields = "__all__"

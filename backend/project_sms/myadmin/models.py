@@ -1,9 +1,8 @@
-from distutils.command.upload import upload
-from email.headerregistry import Address
-from enum import unique
+from email.policy import default
 from django.db import models
 import random
 import string
+from customuser.models import Account
 
 # Create your models here.
 
@@ -33,9 +32,6 @@ def random_reg_id():
 class AddClass(models.Model):
     class_number = models.CharField(max_length=10, unique=True, blank=True)
     class_grade = models.CharField(max_length=5, null=True, blank=True)
-    class_teacher = models.ForeignKey(
-        "Teacher", on_delete=models.PROTECT, null=True, blank=True
-    )
 
     def __str__(self):
         return self.class_number
@@ -61,8 +57,8 @@ class AddSubject(models.Model):
 
 class AddStudent(models.Model):
 
-    student_name = models.CharField(max_length=25)
-    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE, blank=True)
+    student_name = models.ForeignKey(Account, on_delete=models.CASCADE)
+    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE,null=True, blank=True)
     reg_number = models.IntegerField(default=random_reg_id)
     image = models.ImageField(
         upload_to="photos/student", blank=True, max_length=3500, null=True
@@ -74,16 +70,12 @@ class AddStudent(models.Model):
     )
     gender = models.CharField(max_length=15, null=True)
     mobile = models.IntegerField()
-    Address = models.TextField(max_length=300)
+    Address = models.TextField(max_length=300, null=True, blank=True)
 
-    email = models.EmailField(max_length=50)
-    country = models.CharField(max_length=30)
-    state = models.CharField(max_length=25)
-    city = models.CharField(max_length=25)
-    pincode = models.IntegerField()
-
-    username = models.CharField(max_length=15, default=name_gen)
-    password = models.CharField(max_length=15, default=pass_gen)
+    country = models.CharField(max_length=30, null=True, blank=True)
+    state = models.CharField(max_length=25, null=True, blank=True)
+    city = models.CharField(max_length=25, null=True, blank=True)
+    pincode = models.IntegerField(null=True, blank=True)
 
     father = models.CharField(max_length=25, null=True, blank=True)
     mother = models.CharField(max_length=25, null=True, blank=True)
@@ -91,11 +83,11 @@ class AddStudent(models.Model):
     mother_id = models.CharField(max_length=25, null=True, blank=True)
     father_job = models.CharField(max_length=25, null=True, blank=True)
     mother_job = models.CharField(max_length=25, null=True, blank=True)
-    father_mob = models.IntegerField()
-    mother_mob = models.IntegerField()
+    father_mob = models.IntegerField(null=True, blank=True)
+    mother_mob = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.student_name
+        return self.student_name.username
 
 
 class IdCards(models.Model):
@@ -170,22 +162,24 @@ class AddClassTest(models.Model):
     def __str__(self):
         return self.class_num
 
-    pass
 
 
 class Teacher(models.Model):
-    teacher_name = models.CharField(max_length=30)
-    mobile = models.IntegerField()
-    post_name = models.CharField(max_length=20)
+    class_number = models.ForeignKey(
+        AddClass, on_delete=models.PROTECT, null=True, blank=True
+    )
+    user = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=True
+    )
+    mobile = models.IntegerField(null=True, blank=True)
+    post_name = models.CharField(max_length=20, null=True, blank=True)
     image = models.ImageField(upload_to="photos/teachers", null=True, blank=True)
-    join_date = models.DateField()
-    salary = models.IntegerField()
+    join_date = models.DateField(null=True, blank=True)
+    salary = models.IntegerField(null=True, blank=True)
     experience = models.CharField(max_length=10, null=True, blank=True)
-    email = models.EmailField(max_length=50, unique=True, null=True, blank=True)
     address = models.TextField(max_length=300, null=True, blank=True)
-    date_of_birth = models.DateField()
-    username = models.CharField(max_length=15, default=name_gen, unique=True)
-    password = models.CharField(max_length=15, default=pass_gen)
+    date_of_birth = models.DateField(null=True, blank=True)
+    class_teacher=models.BooleanField(default=False)
 
     def __str__(self):
-        return self.teacher_name
+        return self.user.username

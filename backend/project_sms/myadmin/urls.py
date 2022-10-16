@@ -38,7 +38,12 @@ urlpatterns=[
     path('all-employee', AdminEmployeeList.as_view()),
     path('add-employee', AdminAddEmployee.as_view()),
     path('edit-employee/<int:id>', AdminEditEmployee.as_view()),
-    path('delete-employee/<int:id>', DeleteEmployee.as_view())
+    path('delete-employee/<int:id>', DeleteEmployee.as_view()),
+
+    #Admin Teacher
+    path('add-teacher', AddTeacher.as_view()),
+    path('edit-teacher/<int:id>',EditTeacher.as_view()),
+    path('all-teachers', TeachersList.as_view()),
 
 
 ]

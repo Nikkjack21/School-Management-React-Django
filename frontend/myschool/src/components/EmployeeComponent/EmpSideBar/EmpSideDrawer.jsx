@@ -108,7 +108,7 @@ const EmpSideDrawer = () => {
 
       <div className="flex ">
         <div
-          className="w-60 h-screen shadow-lg border backdrop-blur-3xl bg-white "
+          className="w-60 h-screen shadow-lg border backdrop-blur-3xl bg-white"
           id="sidenavSecExample"
         >
             {
