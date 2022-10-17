@@ -86,7 +86,7 @@ const StudentListComponent = () => {
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="text-xs">{data.student_name}</div>
+              <div className="text-xs">{data.student_name.first_name}</div>
               <div className="text-xs">{data.reg_number}</div>
             </div>
             <div className="student-crud flex gap-1 left-[3.5em] absolute bottom-1">

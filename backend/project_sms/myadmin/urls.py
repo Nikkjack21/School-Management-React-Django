@@ -44,6 +44,7 @@ urlpatterns=[
     path('add-teacher', AddTeacher.as_view()),
     path('edit-teacher/<int:id>',EditTeacher.as_view()),
     path('all-teachers', TeachersList.as_view()),
+    path('teacher-detail/<int:id>', SingleTeacherView.as_view()),
 
 
 ]

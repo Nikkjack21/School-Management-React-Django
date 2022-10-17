@@ -4,12 +4,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import ListAPIView
+from customuser.serializer import AccountSerializer
 from employee.serializer import TeacherSerializer
 from myadmin.models import AddClass, AddStudent, Teacher
 from myadmin.serializer import StudentSerializer
 from customuser.models import Account
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
+
 
 # Create your views here.
 
@@ -24,7 +26,7 @@ class TeacherLogin(APIView):
         if user is None:
             raise serializers.ValidationError("Wrong Credentials")
         if not user.is_teacher:
-            raise serializers.ValidationError('You are not Authorized')
+            raise serializers.ValidationError({"error":"You are not Authorized"})
         refresh = RefreshToken.for_user(user)
         return Response ({
             "refresh": str(refresh),
@@ -104,3 +106,6 @@ class AsignAttendance(APIView):
         pass
 
 
+class AllAccount(ListAPIView):
+    queryset = Account.objects.all()
+    serializer_class=AccountSerializer

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import logo from "../../../assets/admin/logo.png";
 import adminicon from "../../../assets/admin/adminicon.png";
+import employeeIcon from '../../../assets/admin/teacher.png'
+import studentIcon from '../../../assets/admin/student.png'
 import vector from "../../../assets/admin/loginvector.jpg";
 import { useContext } from "react";
 import AuthContext from "../../../context/AuthContext";
@@ -9,10 +11,12 @@ import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
 
 const AdminLogin = () => {
-  const { setAuthToken, setAdmin } = useContext(AuthContext);
+  const { setAuthToken, setAdmin, setTeacher } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const [check, setCheck] = useState('Admin')
 
   const { admin } = useContext(AuthContext);
 
@@ -24,24 +28,48 @@ const AdminLogin = () => {
     }
   }, [admin, navigate]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://127.0.0.1:8000/api/token/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    setAuthToken(data);
-    setAdmin(jwt_decode(data.access));
-    localStorage.setItem("authToken", JSON.stringify(data));
-    navigate("/admin");
+    if (check==='Admin'){
+      const response = await fetch("http://127.0.0.1:8000/api/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      const data = await response.json();
+      setAuthToken(data);
+      setAdmin(jwt_decode(data.access));
+      localStorage.setItem("authToken", JSON.stringify(data));
+      navigate("/admin");
+
+    }else if(check==="Teacher"){
+      const response = await fetch("http://127.0.0.1:8000/employee/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      setAuthToken(data);
+      setTeacher(jwt_decode(data.access));
+      localStorage.setItem("empToken", JSON.stringify(data));
+      navigate("/employee-home");
+      console.log("teacherrrr")
+    }else if(check==="Student"){
+      alert('Stuenttt')
+    }
+    
   };
 
   return (
@@ -56,17 +84,28 @@ const AdminLogin = () => {
             />
           </div>
 
-          <div className="flex w-full h-52 justify-center items-end ">
-            <img
-              className=" border-2 w-20 h-20  border-zinc-300 rounded-full "
+          <div className="flex w-full h-52 justify-center gap-3 items-end ">
+            <img onClick={()=>setCheck('Admin')}
+              className=" cursor-pointer border-2 w-20 h-20  border-zinc-300 rounded-full hover:bg-blue-500 "
               src={adminicon}
               alt="adminicon"
+            />
+            <img onClick={()=>setCheck('Teacher')}
+              className=" cursor-pointer border-2 w-20 h-20  border-zinc-300 rounded-full "
+              src={employeeIcon}
+              alt="Employee Icon"
+            />
+            <img onClick={()=>setCheck('Student')}
+              className=" cursor-pointer border-2 w-20 h-20  border-zinc-300 rounded-full "
+              src={studentIcon}
+              alt="Student Icon"
             />
           </div>
           <div className=" flex justify-center">
             <form
               onSubmit={handleSubmit}
-              className="h-44 flex items-center   lg:absolute lg:top-2/4 lg:w-1/5 "
+              className="h-44 flex items-center 
+                 lg:absolute lg:top-2/4 lg:w-1/5 "
             >
               <div className="mx-10 lg:mx-0 md:mx-0">
                 <div className="mb-3 ">
@@ -75,7 +114,7 @@ const AdminLogin = () => {
                     name="username"
                     placeholder="username"
                     onChange={(e) => setUsername(e.target.value)}
-                    className="border outline-none placeholder:text-sm p-1 lg:p-2 w-full rounded "
+                    className="border outline-none p-1 placeholder:text-xs lg:p-2 lg:w-full w-full rounded "
                   />
                 </div>
                 <div className="mb-5 ">
@@ -84,7 +123,7 @@ const AdminLogin = () => {
                     type="password"
                     placeholder="password"
                     onChange={(e) => setPassword(e.target.value)}
-                    className="border outline-none p-1 placeholder:text-sm  lg:p-2 w-full rounded "
+                    className="border  outline-none p-1 placeholder:text-xs  lg:p-2 w-full rounded "
                   />
                 </div>
                 <div className="flex justify-center  ">
@@ -102,7 +141,7 @@ const AdminLogin = () => {
           </div>
         </div>
 
-        <div className="lg:block hidden  lg:h-screen lg:w-[40%] flex-1 shadow-2xl  t" >
+        <div className="lg:block hidden  lg:h-screen lg:w-[40%] flex-1 shadow-2xl  t">
           <div className="flex flex-col ">
             <div className="flex justify-center">
               <h1

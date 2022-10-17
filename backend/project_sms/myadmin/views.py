@@ -37,17 +37,15 @@ class AddClassView(APIView):
         data = request.data
         cls_num = data["class_number"]
         grade = data["class_grade"]
-        cls_teacher = Teacher.objects.get(id=data["class_teacher"])
         check = AddClass.objects.filter(
             Q(class_number__icontains=cls_num)
-            | Q(class_teacher__teacher_name__icontains=cls_teacher)
             | Q(class_number__iexact="class ")
         )
         if check:
             raise ValidationError("Data already exist")
         else:
             addClass = AddClass.objects.create(
-                class_number=cls_num, class_grade=grade, class_teacher=cls_teacher
+                class_number=cls_num, class_grade=grade
             )
         serializer = ClassSerializer(addClass)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -292,7 +290,7 @@ class AddTeacher(APIView):
             date_of_birth=data["date_of_birth"],
             address=data["address"],
             experience=data["experience"],
-            image=data["image"],
+            image=data.get('image'),
         )
         teacher.save()
         serializer = TeacherSerializer(teacher)
@@ -325,6 +323,16 @@ class EditTeacher(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SingleTeacherView(APIView):
+    def get(self, request, id):
+        instance = Teacher.objects.get(id=id)
+        serializer = TeacherSerializer(instance)
+        if serializer:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(404)
+
 
 
 # ADMIN TEACHER VIEW ENDS

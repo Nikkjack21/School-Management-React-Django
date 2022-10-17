@@ -1,13 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDeleteOutline } from "react-icons/md";
 import { BsPlusLg } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../../../context/AuthContext";
 const TeachersLIst = () => {
   const [list, setList] = useState([]);
+  const navigate = useNavigate()
+
+  const {setUserID} = useContext(AuthContext)
 
 
   useEffect(() => {
@@ -17,9 +22,12 @@ const TeachersLIst = () => {
   },[]);
 
 
-  const setid=(id1, id2)=>{
-    console.log(id1);
-    console.log(id2);
+  const setid=(id, id2)=>{
+    console.log('userID', id2);
+    setUserID(id2)
+    console.log('teach',id);
+    navigate(`edit-teacher/${id}`)
+    
   }
   return (
     <div>
@@ -29,7 +37,7 @@ const TeachersLIst = () => {
           className="border placeholder:text-sm p-1"
           placeholder="Search employee"
         />
-        <button className="border px-1 bg-sky-400 text-white hover:bg-blue-600">
+        <button className=" border px-1 bg-sky-400 text-white hover:bg-blue-600">
           search
         </button>
       </div>
@@ -60,7 +68,7 @@ const TeachersLIst = () => {
               </div>
               <div className="flex justify-center pt-2 py-2 space-x-4 align-center">
                 <div >
-                  <BsPencil className="cursor-pointer" onClick={()=>setid(item.user.id, item.id)}                                                                                                                                               />
+                  <BsPencil className="cursor-pointer" onClick={()=>setid((item.id),(item.user.id))}                                                                                                                                               />
                 </div>
                 <div>
                   <MdDeleteOutline />

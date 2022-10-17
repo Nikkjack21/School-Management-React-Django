@@ -1,20 +1,16 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AddClass = () => {
   const navigate = useNavigate();
   const [classNum, setClassNum] = useState("");
   const [grade, setGrade] = useState("");
-  const [teacher, setTeacher] = useState([]);
-  const [selectTeacher, setSelectTeacher] = useState("");
 
   const token = localStorage.getItem("authToken")
     ? JSON.parse(localStorage.getItem("authToken"))
     : null;
 
-  console.log("teacher", selectTeacher);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,7 +20,6 @@ const AddClass = () => {
         {
           class_number: classNum,
           class_grade: grade,
-          class_teacher: selectTeacher,
         },
         {
           headers: {
@@ -33,24 +28,14 @@ const AddClass = () => {
         }
       )
       .then((response) => {
-        if (response.status === 400) {
+        if (response.status === 201) {
           console.log('iiiiiffffffffff');
           navigate("/class");
           alert("Class Added");
-        } else {
-          console.log('elseeeeeeeeeeeeee');
-          navigate("/class");
-          alert("something went wrong");
         }
       });
   };
 
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/employee/all-teachers")
-      .then((response) => setTeacher(response.data));
-  }, []);
-  console.log(teacher);
 
   return (
     <div className="">
@@ -74,24 +59,6 @@ const AddClass = () => {
                 />
               </div>
 
-              <div>
-                <label className="text-sm text-gray-600" htmlFor="">
-                  Class Teacher:
-                </label>
-                <select
-                  onChange={(e) => setSelectTeacher(e.target.value)}
-                  className="w-full px-3 py-2 mb-3 text-xs bg-white border-2 border-gray-300"
-                >
-                  <option className="text-gray-500" hidden>
-                    Select teacher
-                  </option>
-                  {teacher.map((item, id) => (
-                    <option key={id} value={item.id}>
-                      {item.teacher_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
               <div>
                 <label className="text-sm text-gray-600" htmlFor="">

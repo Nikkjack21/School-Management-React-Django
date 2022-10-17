@@ -10,7 +10,7 @@ import { EmpSideBarData } from "./EmpSidebarData";
 import EmpSideMenu from "./EmpSideMenu";
 
 const EmpSideDrawer = () => {
-  const { adminLogout } = useContext(AuthContext);
+  const {  empLogout } = useContext(AuthContext);
 
 
   function classNames(...classes) {
@@ -85,7 +85,7 @@ const EmpSideDrawer = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          onClick={adminLogout}
+                          onClick={empLogout}
                           type="submit"
                           className={classNames(
                             active

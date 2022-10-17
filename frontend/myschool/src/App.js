@@ -23,6 +23,7 @@ import AddStudentComponent from "./components/EmployeeComponent/EmpAddStudentCom
 import AdminTeacherPage from "./pages/Admin/Home/AdminTeacher/AdminTeacherPage";
 import TeachersLIst from "./components/AdminComponent/AdminTeacherComponent/TeachersLIst";
 import AddTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/AddTeacherComponent";
+import EditTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/EditTeacherComponent";
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
           <Route path="/admin-teachers" element={<AdminTeacherPage/>}>
             <Route path="" element={<TeachersLIst/>}/>
             <Route path="add-teacher" element={<AddTeacherComponent/>} />
+            <Route path="edit-teacher/:id" element={<EditTeacherComponent/>}/>
 
           </Route>
 
@@ -96,12 +98,14 @@ function App() {
 
             </Route>
               <Route path="/employee-add-student" element={<AddStudentComponent/>}/>
+            
           </Route>
 
 
 
             {/* Student Route  */}
 
+  
 
         </Routes>
       </AuthProvider>
