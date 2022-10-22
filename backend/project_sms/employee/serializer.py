@@ -1,14 +1,15 @@
-from dataclasses import fields
-from myadmin.models import AddEmployee, Teacher
+from myadmin.models import Teacher
 from rest_framework.serializers import ModelSerializer
+from myadmin.serializer import  AccountSerializer, ClassSerializer
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-class EmpSerializer(ModelSerializer):
+
+class TeacherSerializer(WritableNestedModelSerializer,ModelSerializer):
+    user = AccountSerializer()
+    class_number = ClassSerializer()
+
     class Meta:
-        model=AddEmployee
-        fields='__all__'
+        model = Teacher
+        fields = "__all__"
 
 
-class TeacherSerializer(ModelSerializer):
-    class Meta:
-        model=Teacher
-        fields='__all__'

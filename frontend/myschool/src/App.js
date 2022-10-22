@@ -20,12 +20,17 @@ import EmpSideDrawer from "./components/EmployeeComponent/EmpSideBar/EmpSideDraw
 import EmployeeDashboard from "./components/EmployeeComponent/EmpDashBboardComponent/EmployeeDashboard";
 import EmployeeAddStudent from "./components/EmployeeComponent/EmpAddStudentComp/EmployeeAddStudent";
 import AddStudentComponent from "./components/EmployeeComponent/EmpAddStudentComp/AddStudentComponent";
+import AdminTeacherPage from "./pages/Admin/Home/AdminTeacher/AdminTeacherPage";
+import TeachersLIst from "./components/AdminComponent/AdminTeacherComponent/TeachersLIst";
+import AddTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/AddTeacherComponent";
+import EditTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/EditTeacherComponent";
 
 function App() {
   return (
     <div className="App">
       <AuthProvider>
         <Routes>
+          {/* Admin Route */}
           <Route path="/" element={<AdminLoginPage />} />
           <Route
             path="/admin"
@@ -76,6 +81,15 @@ function App() {
             <Route path="add-employee" element={<AddEmployee/>}/>
 
           </Route>
+          <Route path="/admin-teachers" element={<AdminTeacherPage/>}>
+            <Route path="" element={<TeachersLIst/>}/>
+            <Route path="add-teacher" element={<AddTeacherComponent/>} />
+            <Route path="edit-teacher/:id" element={<EditTeacherComponent/>}/>
+
+          </Route>
+
+
+          {/* Employee Route */}
 
           <Route path="" element={<EmpSideDrawer/>}>
             
@@ -84,9 +98,14 @@ function App() {
 
             </Route>
               <Route path="/employee-add-student" element={<AddStudentComponent/>}/>
+            
           </Route>
 
-            
+
+
+            {/* Student Route  */}
+
+  
 
         </Routes>
       </AuthProvider>

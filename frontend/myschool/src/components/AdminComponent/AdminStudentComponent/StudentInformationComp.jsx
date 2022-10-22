@@ -118,6 +118,7 @@ const StudentInformationComp = () => {
     }
   };
 
+
   const removeSelectedImage = () => {
     setSelectedImage();
   };

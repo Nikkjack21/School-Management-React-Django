@@ -35,6 +35,9 @@ class MyAccountManager(BaseUserManager):
         user.is_active  = True
         user.is_staff   = True
         user.is_superadmin  = True
+        user.is_teacher     = True
+        user.is_student = True
+        user.is_employee = True
         user.save(using=self._db)
         return user
 
@@ -54,6 +57,9 @@ class Account(AbstractBaseUser):
     is_staff        = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=True)
     is_superadmin   = models.BooleanField(default=False)
+    is_teacher      = models.BooleanField(default=False)
+    is_student      = models.BooleanField(default=False)
+    is_employee     = models.BooleanField(default=False)
 
 
    

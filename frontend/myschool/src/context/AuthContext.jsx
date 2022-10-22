@@ -22,7 +22,13 @@ export const AuthProvider = ({ children }) => {
       : null
   );
 
+  const [teacher, setTeacher] = useState(()=>localStorage.getItem("empToken")
+  ? jwt_decode(localStorage.getItem("empToken"))
+  : null)
+
   const navigate = useNavigate();
+  const [userID, setUserID] = useState('')
+
 
   const adminLogout = useCallback(() => {
     setAuthToken(null);
@@ -50,6 +56,17 @@ export const AuthProvider = ({ children }) => {
     }
   }, [authToken, adminLogout]);
 
+
+
+const empLogout=()=>{
+  setAuthToken(null)
+  setTeacher(null)
+  localStorage.removeItem("empToken");
+  navigate("/");
+}
+
+
+
   useEffect(() => {
     let interval = setInterval(() => {
       if (authToken) {
@@ -63,10 +80,15 @@ export const AuthProvider = ({ children }) => {
     user: user,
     admin: admin,
     authToken: authToken,
+    teacher:teacher,
+    userID:userID,
     setAdmin: setAdmin,
     setUser: setUser,
     setAuthToken: setAuthToken,
     adminLogout: adminLogout,
+    setTeacher:setTeacher,
+    empLogout:empLogout,
+    setUserID:setUserID,
   };
 
   return (

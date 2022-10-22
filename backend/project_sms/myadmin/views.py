@@ -2,13 +2,14 @@ from functools import partial
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
+from employee.serializer import TeacherSerializer
 from myadmin.models import *
 from myadmin.serializer import (
     ClassSerializer,
     EmployeeSerializer,
-    StudentSerializer,
     SubjectListSerializer,
     SubjectSerializer,
+    StudentSerializer
 )
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,6 +19,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.serializers import ValidationError
 from django.db.models import Q
+
 
 # Create your views here.
 
@@ -31,22 +33,19 @@ class AdminDashboard(APIView):
 
 class AddClassView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
+
     def post(self, request):
         data = request.data
         cls_num = data["class_number"]
         grade = data["class_grade"]
-        cls_teacher = Teacher.objects.get(id=data["class_teacher"])
+        print("CLASS DATA", data)
         check = AddClass.objects.filter(
-            Q(class_number__icontains=cls_num)
-            | Q(class_teacher__teacher_name__icontains=cls_teacher)
-            | Q(class_number__iexact="class ")
+            Q(class_number__icontains=cls_num) | Q(class_number__iexact="class ")
         )
         if check:
-            raise ValidationError("Data already exist")
+            raise ValidationError({"error":"Class Already Exist"})
         else:
-            addClass = AddClass.objects.create(
-                class_number=cls_num, class_grade=grade, class_teacher=cls_teacher
-            )
+            addClass = AddClass.objects.create(class_number=cls_num, class_grade=grade)
         serializer = ClassSerializer(addClass)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -55,7 +54,6 @@ class AllClassList(APIView):
     permission_classes = []
 
     def get(self, request):
-        hey = request.user
         classess = AddClass.objects.all()
         serializer = ClassSerializer(classess, many=True)
         if serializer:
@@ -102,7 +100,7 @@ class SubjectNameDelete(generics.DestroyAPIView):
 
 class SubjectNameEdit(RetrieveUpdateDestroyAPIView):
     queryset = SubjectList.objects.all()
-    serializer_class = SubjectSerializer
+    serializer_class = SubjectListSerializer
     lookup_field = "id"
 
 
@@ -253,3 +251,127 @@ class DeleteEmployee(APIView):
 
 
 # ADMIN EMPLOYEE VIEWS ENDS
+
+
+# ADMIN TEACHER VIEW BEGIN
+class TeachersList(generics.ListAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+
+class AddTeacher(APIView):
+    def post(self, request):
+        data = request.data
+        cls = AddClass.objects.get(id=data["class_number"])
+
+        username = data.get("user_name")
+        email = data["email"]
+        password = data["password"]
+        mobile = data["mobile"]
+        post = data["post_name"]
+        user = Account.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+        )
+        user.is_teacher = True
+        user.save()
+        teacher = Teacher.objects.create(
+            class_number=cls,
+            user=user,
+            mobile=mobile,
+            post_name=post,
+            salary=data["salary"],
+            join_date=data["join_date"],
+            date_of_birth=data["date_of_birth"],
+            address=data["address"],
+            experience=data["experience"],
+            image=data.get("image"),
+        )
+        teacher.save()
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class EditTeacher(APIView):
+    def post(self, request, id):
+        data = request.data
+        print("DATA", data)
+        ids = data.get('id')
+
+        try:
+            user = Account.objects.get(id=ids)
+            print("USERRRRRRRRRRRRRRRRRRR", user.id)
+            first_name = data.get("first_name")
+            last_name = data.get("last_name")
+            username = data.get("username")
+            email = data.get("email")
+            if first_name:
+                user.first_name = first_name
+            if last_name:
+                user.last_name = last_name
+            if email:
+                user.email = email
+            if username:
+                user.username = username
+            user.save()
+        except Exception as e:
+            print('eeeeeeee', e)
+            pass
+        instance = Teacher.objects.get(id=id)
+        serializer = TeacherSerializer(
+            instance=instance, data=data, partial=True
+        )
+        
+        if serializer.is_valid():
+            print("serrrrrrrrrrrrrrr")
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SingleTeacherView(generics.RetrieveAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+    lookup_field = "id"
+
+
+
+
+
+class TeaGen(APIView):
+    def post(self, request, id):
+        data = request.data
+        ids = data.get('id')
+        print('yyyyyy',ids)
+        try:
+            user = Account.objects.get(id=ids)
+            first_name = data.get("first_name")
+            last_name = data.get("last_name")
+            username = data.get("username")
+            email = data.get("email")
+            if first_name:
+                user.first_name = first_name
+            if last_name:
+                user.last_name = last_name
+            if email:
+                user.email = email
+            if username:
+                user.username = username
+            user.save()
+        except Exception as e:
+            print("errorrr",e)
+            pass
+        tea = Teacher.objects.get(id=id)
+        ser = TeacherSerializer(instance=tea, data=data, partial=True)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data)
+        return Response(500)
+
+
+
+# ADMIN TEACHER VIEW ENDS

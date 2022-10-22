@@ -8,6 +8,7 @@ import { BsCash } from "react-icons/bs";
 import { TbCashBanknote } from "react-icons/tb";
 import { TbHandStop } from "react-icons/tb";
 import { RiPencilRuler2Line } from "react-icons/ri";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 
 export const SidebarData = [
@@ -25,6 +26,11 @@ export const SidebarData = [
     name: "Subject",
     path:"/subject",
     icon: <RiBook2Line/>
+  },
+  {
+    name: "Teachers",
+    path:"/admin-teachers",
+    icon:<FaChalkboardTeacher/>
   },
   {
     name: "Students",

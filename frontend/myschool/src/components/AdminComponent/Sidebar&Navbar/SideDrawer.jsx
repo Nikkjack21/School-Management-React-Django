@@ -104,7 +104,7 @@ const SideDrawer = ({ children }) => {
         </div>
       </nav>
       <div className="sidebarNav flex h-screen">
-        <div className=" hidden lg:block scrollbar lg:w-[14.5em] h-screen bg-[#ffffff] border-x-2 shadow- mt-5">
+        <div className=" hidden lg:block lg:w-60 h-screen shadow-lg bg-white backdrop-blur-3xl ">
           {SidebarData.map((data, id) => (
 
             <div key={id} className=" flex  hover:bg-blue-500 hover:rounded-md hover:text-white group hover:drop-shadow-2xl hover:font-semibold  h-12">
@@ -117,7 +117,7 @@ const SideDrawer = ({ children }) => {
           ))}
         </div>
 
-        <div className="bg-[#f6f7fb] h-full w-full">
+        <div className="bg-[#f6f7fb]  h-full w-full">
           {children} 
         </div>
       </div>

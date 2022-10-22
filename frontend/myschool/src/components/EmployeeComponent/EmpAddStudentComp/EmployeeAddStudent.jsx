@@ -58,10 +58,10 @@ const EmployeeAddStudent = () => {
             />
             <div className="space-y-4 text-center divide-y divide-gray-700 ">
               <div className="my-2 space-y-1">
-                <h2 className="text-base font-semibold ">{item.student_name}</h2>
+                <h2 className="text-base font-semibold ">{item.student_name.first_name} {item.student_name.last_name}</h2>
                 <p className="px-5 text-base  dark:text-gray-600">
                   {item.reg_number}
-                </p>
+                </p> 
               </div>
               <div className="flex justify-center pt-2 py-2 space-x-4 align-center">
                 <div>

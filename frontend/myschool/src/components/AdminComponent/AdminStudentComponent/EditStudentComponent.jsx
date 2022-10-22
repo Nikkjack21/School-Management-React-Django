@@ -75,6 +75,10 @@ const EditStudentComponent = () => {
     loadUser();
   }, [id]);
 
+
+
+
+  
   const onSubmit = (e) => {
     e.preventDefault();
     axios.post(`http://127.0.0.1:8000/edit-student/${id}`, {
@@ -118,7 +122,7 @@ const EditStudentComponent = () => {
   const removeSelectedImage = () => {
     setSelectedImage();
   };
-
+console.log('YYYYYYYYYY', detail.image);
   return (
     <div>
       EditStudentComponent
