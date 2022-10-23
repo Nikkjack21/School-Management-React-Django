@@ -7,6 +7,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const NewClass = () => {
   const [list, setList] = useState([]);
@@ -16,21 +17,6 @@ const NewClass = () => {
     ? JSON.parse(localStorage.getItem("authToken"))
     : null;
   console.log("token", token);
-
-  // useEffect(() => {
-  //   const viewClass = async () => {
-  //     await axios
-  //       .get("http://127.0.0.1:8000/all-class", {
-  //         headers: {
-  //           Authorization: `Bearer ${token.access}`,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         setList(response.data);
-  //       });
-  //   };
-  //   viewClass();
-  // }, [token.access, see]);
 
   useEffect(() => {
     axios
@@ -44,23 +30,21 @@ const NewClass = () => {
       });
   }, [token.access, see]);
 
-  //   useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await fetch("http://127.0.0.1:8000/all-class",{
-  //       credentials:'include',
-  //       headers:{
-  //         "Authorization": `Bearer ${token.access}`
-  //       }
-  //     });
-  //     const newData = await response.json();
-  //     setList(newData);
-  //   };
-  //   fetchData();
-  // }, [token]);
-
-  const deleteClass = async (id) => {
-    const resp = await axios.post(`http://127.0.0.1:8000/delete-class/${id}`);
-    setSee(resp);
+  const deleteClass = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const resp = axios.post(`http://127.0.0.1:8000/delete-class/${id}`);
+        Swal.fire("", "class has been deleted");
+        setSee(resp);
+      }
+    });
   };
 
   return (

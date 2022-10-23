@@ -1,22 +1,25 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
-import { BsPlusLg } from "react-icons/bs";
-import { BsPencil } from "react-icons/bs";
+import { RiUserSearchFill } from "react-icons/ri";
 import { MdDeleteOutline } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import 'react-toastify/dist/ReactToastify.css';
 
 const StudentListComponent = () => {
   const [list, setList] = useState([]);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/all-student")
       .then((response) => setList(response.data));
   }, []);
+
+
+
+
 
   return (
     <div className="mx-10">
@@ -62,14 +65,7 @@ const StudentListComponent = () => {
         </div>
       </div>
       <div className="student mt-10 flex gap-8 flex-wrap">
-        <Link to={"add-student"}>
-          <div className="w-36 h-36 mt-5 text-center flex flex-col items-center justify-center rounded-full bg-[#514fab] text-white font-semibold">
-            <div>
-              <BsPlusLg />
-            </div>
-            Add Student
-          </div>
-        </Link>
+
         {list.map((data, id) => (
           <div
             key={id}
@@ -77,7 +73,6 @@ const StudentListComponent = () => {
           >
             <div className="flex flex-col items-center relative top-3 ">
               <div className="flex justify-center rounded-full w-20 h-20 mb-3 border  overflow-hidden bg-slate-200">
-                {/* <FaUserAlt className=" text-blue-500 mt-3  " size={70} /> */}
                 <img
                   className="w-full object-cover h-full "
                   src={data.image}
@@ -92,11 +87,12 @@ const StudentListComponent = () => {
             <div className="student-crud flex gap-1 left-[3.5em] absolute bottom-1">
               <div
                 className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-blue-500 cursor-pointer"
-                onClick={() => navigate(`edit-student/${data.id}`)}
               >
-                <BsPencil className="text-white" />
+                <RiUserSearchFill className="text-white" /> 
               </div>
-              <div className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-red-500">
+              
+              <div className="text-xs w-7 h-7 rounded-full flex items-center justify-center bg-red-500"
+             >
                 <MdDeleteOutline className="text-white" size={18} />
               </div>
             </div>

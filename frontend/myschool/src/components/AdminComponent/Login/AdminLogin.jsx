@@ -11,7 +11,7 @@ import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
 
 const AdminLogin = () => {
-  const { setAuthToken, setAdmin, setTeacher } = useContext(AuthContext);
+  const { setAuthToken, setAdmin, setTeacher, setEmpToken } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const AdminLogin = () => {
       });
       const data = await response.json();
       console.log(data);
-      setAuthToken(data);
+      setEmpToken(data)
       setTeacher(jwt_decode(data.access));
       localStorage.setItem("empToken", JSON.stringify(data));
       navigate("/employee-home");

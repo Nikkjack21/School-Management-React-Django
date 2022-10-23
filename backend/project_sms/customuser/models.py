@@ -58,6 +58,7 @@ class Account(AbstractBaseUser):
     is_active       = models.BooleanField(default=True)
     is_superadmin   = models.BooleanField(default=False)
     is_teacher      = models.BooleanField(default=False)
+    is_class_teacher= models.BooleanField(default=False)
     is_student      = models.BooleanField(default=False)
     is_employee     = models.BooleanField(default=False)
 

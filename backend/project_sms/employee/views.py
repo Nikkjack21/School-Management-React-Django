@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,7 +8,14 @@ from customuser.models import Account
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
 
-from myadmin.serializer import StudentSerializer
+from myadmin.serializer import AccountSerializer, StudentSerializer
+from customuser.models import Account
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import serializers
+from rest_framework.permissions import IsAuthenticated
+from .permissions import isClassTeacher
+from rest_framework import generics
+
 
 # Create your views here.
 
@@ -22,12 +30,14 @@ class TeacherLogin(APIView):
         if user is None:
             raise serializers.ValidationError("Wrong Credentials")
         if not user.is_teacher:
-            raise serializers.ValidationError({"error":"You are not Authorized"})
+            raise serializers.ValidationError({"error": "You are not Authorized"})
         refresh = RefreshToken.for_user(user)
-        return Response ({
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        })
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        )
 
 
 class AddStudentByTeacher(APIView):
@@ -102,37 +112,22 @@ class AsignAttendance(APIView):
         pass
 
 
-# class AllAccount(ListAPIView):
-#     queryset = Account.objects.all()
-#     serializer_class=AccountSerializer
+
+class ViewStudentsByClassTeacher(APIView):
+    permission_classes = [isClassTeacher]
+
+    def get(self, request):
+        user = request.user
+        teacher = user.teacher_set.first()
+        class_number = teacher.class_number_id
+        student = AddStudent.objects.filter(class_number=class_number)
+
+        serializer = StudentSerializer(
+            instance=student, many=True, context={"request": request}
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+class allAc(generics.ListAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer

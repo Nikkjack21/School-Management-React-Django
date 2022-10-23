@@ -22,6 +22,12 @@ export const AuthProvider = ({ children }) => {
       : null
   );
 
+  const [empToken, setEmpToken] = useState(() =>
+  localStorage.getItem("empToken")
+    ? JSON.parse(localStorage.getItem("empToken"))
+    : null
+);
+
   const [teacher, setTeacher] = useState(()=>localStorage.getItem("empToken")
   ? jwt_decode(localStorage.getItem("empToken"))
   : null)
@@ -58,12 +64,54 @@ export const AuthProvider = ({ children }) => {
 
 
 
-const empLogout=()=>{
-  setAuthToken(null)
-  setTeacher(null)
-  localStorage.removeItem("empToken");
-  navigate("/");
-}
+
+
+
+
+
+  const empLogout=useCallback(()=>{
+    setAuthToken(null)
+    setTeacher(null)
+    localStorage.removeItem("empToken");
+    navigate("/");
+  },[navigate])
+  
+  
+
+
+
+
+const updateEmpToken=useCallback(async()=>{
+  const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ refresh: empToken?.refresh }),
+  });
+  const data = await response.json()
+  if (response.status === 200){
+    setEmpToken(data)
+    setTeacher(data.access)
+    localStorage.setItem("empToken", JSON.stringify(data))
+  }else{
+    empLogout()
+  }
+},[empLogout,empToken])
+
+
+
+useEffect(()=>{
+  let interval = setInterval(()=>{
+    if(empToken){
+      updateEmpToken()
+    }
+  }, 100000 * 2)
+  return()=> clearInterval(interval)
+},[empToken, updateEmpToken])
+
+
+
 
 
 
@@ -72,7 +120,7 @@ const empLogout=()=>{
       if (authToken) {
         updateToken();
       }
-    }, 10000 * 2);
+    }, 100000 * 2);
     return () => clearInterval(interval);
   }, [authToken, updateToken]);
 
@@ -82,6 +130,7 @@ const empLogout=()=>{
     authToken: authToken,
     teacher:teacher,
     userID:userID,
+    empToken:empToken,
     setAdmin: setAdmin,
     setUser: setUser,
     setAuthToken: setAuthToken,
@@ -89,6 +138,7 @@ const empLogout=()=>{
     setTeacher:setTeacher,
     empLogout:empLogout,
     setUserID:setUserID,
+    setEmpToken:setEmpToken,
   };
 
   return (

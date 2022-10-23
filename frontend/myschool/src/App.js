@@ -6,13 +6,11 @@ import AdminClassPages from "./pages/Admin/Home/AdminClass/AdminClassPages";
 import AdminSubjectPage from "./pages/Admin/Home/AdminSubject/AdminSubjectPage";
 import AdminStudentPage from "./pages/Admin/Home/AdminStudent/AdminStudentPage";
 import StudentListComponent from "./components/AdminComponent/AdminStudentComponent/StudentListComponent";
-import StudentFormComponent from "./components/AdminComponent/AdminStudentComponent/StudentFormComponent";
 import { AdminProtectRoute } from "./utils/ProtectRoute";
 import NewClass from "./components/AdminComponent/NewClassComponent/NewClass";
 import AddClass from "./components/AdminComponent/NewClassComponent/AddClass";
 import AdminSubject from "./components/AdminComponent/AdminSubjectComponent/AdminSubject";
 import AddSubjectComp from "./components/AdminComponent/AdminSubjectComponent/AddSubjectComp";
-import EditStudentComponent from "./components/AdminComponent/AdminStudentComponent/EditStudentComponent";
 import AdminEmployeePage from "./pages/Admin/Home/AdminEmployee/AdminEmployeePage";
 import EmployeeLits from "./components/AdminComponent/AdminEmployeeComponent/EmployeeLits";
 import AddEmployee from "./components/AdminComponent/AdminEmployeeComponent/AddEmployee";
@@ -24,6 +22,7 @@ import AdminTeacherPage from "./pages/Admin/Home/AdminTeacher/AdminTeacherPage";
 import TeachersLIst from "./components/AdminComponent/AdminTeacherComponent/TeachersLIst";
 import AddTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/AddTeacherComponent";
 import EditTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/EditTeacherComponent";
+import Test from "./Test";
 
 function App() {
   return (
@@ -73,8 +72,6 @@ function App() {
             }
           >
             <Route path="" element={<StudentListComponent />} />
-            <Route path="add-student" element={<StudentFormComponent />} />
-            <Route path="edit-student/:id" element={<EditStudentComponent/>}/>
           </Route>
           <Route path="/admin-employee" element={<AdminEmployeePage/>}>
             <Route path="" element={<EmployeeLits/>}/>
@@ -106,6 +103,12 @@ function App() {
             {/* Student Route  */}
 
   
+
+
+
+
+            <Route path="/test" element={<Test/>}/>
+
 
         </Routes>
       </AuthProvider>

@@ -1,4 +1,3 @@
-
 from rest_framework.serializers import ModelSerializer
 from myadmin.models import *
 from customuser.models import Account
@@ -7,19 +6,21 @@ from customuser.models import Account
 class AccountSerializer(ModelSerializer):
     class Meta:
         model = Account
-        fields = ["id", "first_name", "last_name", "username", "email", "password", ]
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password",
+        ]
         extra_kwargs = {"password": {"write_only": True}}
-
-
 
 
 class ClassSerializer(ModelSerializer):
     class Meta:
         model = AddClass
         fields = "__all__"
-
-
-
 
 
 class SubjectListSerializer(ModelSerializer):
@@ -38,7 +39,8 @@ class SubjectSerializer(ModelSerializer):
 
 
 class StudentSerializer(ModelSerializer):
-    student_name=AccountSerializer()
+    student_name = AccountSerializer()
+
     class Meta:
         model = AddStudent
         fields = "__all__"
@@ -84,5 +86,3 @@ class ExamSerializer(ModelSerializer):
     class Meta:
         model = AddExam
         fields = "__all__"
-
-

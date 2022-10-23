@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from employee.serializer import TeacherSerializer
+from employee.serializer import TeacherSerializer
 from myadmin.models import *
 from myadmin.serializer import (
     ClassSerializer,
@@ -33,6 +34,7 @@ class AdminDashboard(APIView):
 
 class AddClassView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
+
 
     def post(self, request):
         data = request.data
@@ -257,6 +259,13 @@ class DeleteEmployee(APIView):
 class TeachersList(generics.ListAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
+
+
+class TeacherView(APIView):
+    def get(self, request):
+        t = Teacher.objects.all()
+        ser = TeacherSerializer(t, many=True)
+        return Response(ser.data, status=200)
 
 
 class AddTeacher(APIView):

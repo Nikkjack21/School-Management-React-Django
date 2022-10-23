@@ -9,6 +9,7 @@ import { TbCashBanknote } from "react-icons/tb";
 import { TbHandStop } from "react-icons/tb";
 import { RiPencilRuler2Line } from "react-icons/ri";
 import { FaChalkboardTeacher } from "react-icons/fa";
+import { AiOutlineTable } from "react-icons/ai";
 
 
 export const SidebarData = [
@@ -42,6 +43,11 @@ export const SidebarData = [
     name: "Employees",
     path:"/admin-employee",
     icon:<MdWorkOutline/>
+  },
+  {
+    name: "Time Table",
+    path: '',
+    icon: <AiOutlineTable/>
   },
   {
     name:"Accounts",

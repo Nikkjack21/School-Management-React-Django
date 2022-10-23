@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 const AddClass = () => {
   const navigate = useNavigate();
   const [classNum, setClassNum] = useState("");
   const [grade, setGrade] = useState("");
+  const [err, seterr] = useState("");
 
   const token = localStorage.getItem("authToken")
     ? JSON.parse(localStorage.getItem("authToken"))
@@ -30,17 +33,28 @@ const AddClass = () => {
         if (response.status === 201) {
           console.log("iiiiiffffffffff");
           navigate("/class");
-          alert("Class Added");
+          Swal.fire({
+            text: `${classNum} is added `,
+          });
         }
       })
       .catch((error) => {
-        alert(error.response.data.error);
+        if (error.response) {
+          Swal.fire({
+            text: `${classNum} ` + error.response.data.error,
+            width: "25%",
+          });
+          seterr(error.response.data.error);
+        }
       });
   };
+
+  console.log("ERRROORRRR", err);
 
   return (
     <div className="">
       <h1>Place to add class</h1>
+
       <div className="container shadow-lg relative mx-28 lg:mx-[30%] lg:my-16 my-20 border w-96 h-96  ">
         <form onSubmit={handleSubmit}>
           <div className="">

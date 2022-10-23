@@ -1,28 +1,56 @@
 import axios from 'axios';
 import React from 'react'
+import { useContext } from 'react';
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { BsPlusLg } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+import AuthContext from '../../../context/AuthContext';
+
 
 
 const EmployeeAddStudent = () => {
   const [title, setTitle]=useState("")
   const [list, setList] = useState([]);
 
+  const {teacher} = useContext(AuthContext)
+
+  const token = localStorage.getItem("empToken")
+  ? JSON.parse(localStorage.getItem("empToken"))
+  : null;
+
+  const naviagte = useNavigate()
+
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/all-student")
-      .then((response) => setList(response.data));
-  }, []);
-
+      .get("http://127.0.0.1:8000/employee/view-students",{
+        headers:{
+          Authorization: `Bearer ${token.access}`,
+        }
+      })
+      .then((response) => setList(response.data))
+      .catch((error)=>{
+        Swal.fire({
+          title:'You are not Authorized',
+          text: error.response.data.detail,
+          icon:'error'
+        })
+        // alert(error.response.data.detail)
+        naviagte('/employee-home')
+      })
+      
+  }, [token.access, naviagte]);
+console.log("TEACHER", teacher.mobile)
 
   useEffect(()=>{
     setTitle('Add Student')
     document.title=title
   },[title])
+
+  console.log(list);
 
   return (
     <div className='mx-7'>
