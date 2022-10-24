@@ -1,6 +1,6 @@
 from django.urls import path
 
-from employee.views import  AddStudentByTeacher, DeleteStudentByTeacher, EditStudentByTeacher,   TeacherLogin, ViewStudentsByClassTeacher
+from employee.views import  AddStudentByTeacher, DeleteStudentByTeacher, EditStudentByTeacher, TeacherClassID,   TeacherLogin, ViewStudentsByClassTeacher
 
 
 urlpatterns=[
@@ -13,6 +13,10 @@ urlpatterns=[
     path('delete-student/<int:id>',DeleteStudentByTeacher.as_view()),
     path('view-students', ViewStudentsByClassTeacher.as_view()),
 
+
+
+    #Teacher
+    path('class-id', TeacherClassID.as_view()),
 
     
 ]

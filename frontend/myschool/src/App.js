@@ -23,6 +23,7 @@ import TeachersLIst from "./components/AdminComponent/AdminTeacherComponent/Teac
 import AddTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/AddTeacherComponent";
 import EditTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/EditTeacherComponent";
 import Test from "./Test";
+import AdminTimeTbalePage from "./pages/Admin/Home/AdminTimeTable/AdminTimeTbalePage";
 
 function App() {
   return (
@@ -82,6 +83,9 @@ function App() {
             <Route path="" element={<TeachersLIst/>}/>
             <Route path="add-teacher" element={<AddTeacherComponent/>} />
             <Route path="edit-teacher/:id" element={<EditTeacherComponent/>}/>
+
+          </Route>
+          <Route path="/time-table" element={<AdminTimeTbalePage/>}>
 
           </Route>
 

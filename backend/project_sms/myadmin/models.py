@@ -183,3 +183,21 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+
+
+class Day(models.Model):
+    day_name = models.CharField(max_length=15)
+    subject_name = models.ManyToManyField(SubjectList)
+    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.class_number.class_number
+
+class timeTable(models.Model):
+    time_table =  models.ForeignKey(Day, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.time_table.class_number.class_number
+

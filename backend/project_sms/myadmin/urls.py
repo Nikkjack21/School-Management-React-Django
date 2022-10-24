@@ -45,7 +45,10 @@ urlpatterns=[
     path('edit-teacher/<int:id>',EditTeacher.as_view()),
     path('all-teachers', TeachersList.as_view()),
     path('teacher-detail/<int:id>', SingleTeacherView.as_view()),
-    path('tea/<int:id>', TeaGen.as_view())
+    path('tea/<int:id>', TeaGen.as_view()),
 
-    # path('gen-edit/<int:id>', genEditTeacher.as_view())
+    #Timetable
+
+    path('timetable', timeTableView.as_view()),
+
 ]

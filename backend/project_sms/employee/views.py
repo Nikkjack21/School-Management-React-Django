@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from employee.serializer import TeacherSerializer
 from myadmin.models import AddClass, AddStudent
 from customuser.models import Account
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -15,6 +16,8 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from .permissions import isClassTeacher
 from rest_framework import generics
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 
 # Create your views here.
@@ -41,50 +44,54 @@ class TeacherLogin(APIView):
 
 
 class AddStudentByTeacher(APIView):
+    parser_classes = [MultiPartParser, FormParser]
     def post(self, request):
-
         data = request.data
-        cls = AddClass.objects.get(id=data["class_number"])
-        fname = data["first_name"]
-        lname = data["last_name"]
-        email = data["email"]
-        uname = data["username"]
-        password = data["password"]
-
-        account = Account.objects.create_user(
-            username=uname,
-            first_name=fname,
-            last_name=lname,
-            email=email,
-            password=password,
+        class_number = AddClass.objects.get(id=data.get("class_number"))
+  
+        print('class_numberrrrrr', class_number)
+        user = Account.objects.create(
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            username=data["username"],
+            email=data["email"],
+            password=data["password"],
         )
-        account.is_student = True
-        account.save()
-        mobile = data["mobile"]
+        user.is_student = True
+        user.save()
         student = AddStudent.objects.create(
-            student_name=account,
-            class_number=cls,
-            mobile=mobile,
-            Address=data["Address"],
-            country=data["country"],
-            state=["state"],
-            city=data["city"],
-            pincode=data["pincode"],
-            father=["father"],
-            mother=data["mother"],
-            father_id=data["father_id"],
-            mother_id=data["mother_id"],
-            father_mob=data["father_mob"],
-            mother_mob=data["mother_mob"],
-            image=data["image"],
-            date_of_birth=data["date_of_birth"],
-            admission_date=data["admission_date"],
+            student_name=user,
+            class_number=class_number,
+            admission_date=data.get("admission_date"),
+            date_of_birth=data.get("date_of_birth"),
+            gender=data.get("gender"),
+            mobile=data.get("mobile"),
+            Address=data.get("Address"),
+            country=data.get("country"),
+            state=data.get("state"),
+            city=data.get("city"),
+            pincode=data.get("pincode"),
+            image=data.get("image"),
+            father=data.get('father'),
+            mother=data.get('mother'),
+            father_mob=data.get('father_mob'),
+            mother_mob=data.get('mother_mob')
         )
-        student.gender = data["gender"]
         student.save()
         serializer = StudentSerializer(student)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+
+class TeacherClassID(APIView):
+    permission_classes = [isClassTeacher]
+
+    def get(self, request):
+        user = request.user
+        teacher = user.teacher_set.first()
+        cls = teacher
+        ser = TeacherSerializer(cls)
+        return Response(ser.data)
 
 class EditStudentByTeacher(APIView):
     def post(self, request, id):
@@ -110,7 +117,6 @@ class AsignAttendance(APIView):
         cls_number = AddClass.objects.get(id=id)
 
         pass
-
 
 
 class ViewStudentsByClassTeacher(APIView):

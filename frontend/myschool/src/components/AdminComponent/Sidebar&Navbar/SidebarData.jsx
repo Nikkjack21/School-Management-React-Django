@@ -46,7 +46,7 @@ export const SidebarData = [
   },
   {
     name: "Time Table",
-    path: '',
+    path: '/time-table',
     icon: <AiOutlineTable/>
   },
   {

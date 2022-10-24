@@ -7,95 +7,90 @@ import { MdDeleteForever } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const AddStudentComponent = () => {
-  const [image, setImage] = useState();
   const inpRef = useRef();
-  const [list, setList] = useState([]);
-  const navigate = useNavigate()
+  const [cls, setCls] = useState([]);
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState({
-    first_name: "",
-    last_name: "",
-    username: "",
-    password: "",
-    class_number: "",
-    reg_number: "",
-    admission_date: "",
-    image: "",
-    gender: "",
-    mobile: "",
-    Address: "",
-    email: "",
-    country: "",
-    state: "",
-    city: "",
-    pincode: "",
-    father: "",
-    mother: "",
-    father_id: "",
-    mother_id: "",
-    father_mob: "",
-    mother_mob: "",
-  });
+  const token = localStorage.getItem("empToken")
+    ? JSON.parse(localStorage.getItem("empToken"))
+    : null;
 
-  const {
-   
-    first_name,
-    last_name,
-    username,
-    password,
-    reg_number,
-    class_number,
-    date_of_birth,
-    admission_date,
-    gender,
-    mobile,
-    Address,
-    email,
-    country,
-    state,
-    city,
-    pincode,
-    father,
-    mother,
-    father_id,
-    mother_id,
-    father_mob,
-    mother_mob,
-  } = user;
+  const [first_name, setfname] = useState("");
+  const [last_name, setlname] = useState("");
+  const [email, setemail] = useState("");
+  const [username, setuname] = useState("");
+  const [password, setPassword] = useState("");
+  const [gender, setgen] = useState("");
+  const [mobile, setmobile] = useState("");
+  const [Address, setaddress] = useState("");
+  const [dob, setDob] = useState("");
+  const [jdate, setJdate] = useState("");
+  const [country, setCOuntry] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [image, setImage] = useState();
+  const [father, setFather] = useState("");
+  const [mother, setMother] = useState("");
+  const [father_mob, setFmob] = useState("");
+  const [mother_mob, setMmob] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/all-class")
-      .then((response) => setList(response.data));
-  }, []);
-
-  const inputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+      .get("http://127.0.0.1:8000/employee/class-id", {
+        headers: {
+          Authorization: `Bearer ${token.access}`,
+        },
+      })
+      .then((response) => setCls(response.data.class_number));
+  }, [token.access]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/employee/add-student", user, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      .post(
+        "http://127.0.0.1:8000/employee/add-student",
+        {
+          first_name: first_name,
+          last_name: last_name,
+          email: email,
+          username: username,
+          password: password,
+          gender: gender,
+          mobile: mobile,
+          Address: Address,
+          dob: dob,
+          jdate: jdate,
+          country: country,
+          city: city,
+          state: state,
+          pincode: pincode,
+          image: image,
+          father: father,
+          mother: mother,
+          father_mob: father_mob,
+          mother_mob: mother_mob,
+          class_number: cls.id,
         },
-      })
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         console.log("RESPONSE", response);
-        if(response.status === 201){
-          navigate('/employee-student')
+        if (response.status === 201) {
+          navigate("/employee-student");
         }
-        
-      }).catch(error=>{
-        alert(error.response)
-        console.log('Error', error.response);
       })
+      .catch((error) => {
+        alert(error);
+        console.log("Error", error);
+      });
   };
 
   const imageChange = (e) => {
-    setUser({ ...user, image: e.target.files[0] });
-
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
     }
@@ -106,6 +101,8 @@ const AddStudentComponent = () => {
     setImage();
     inpRef.current.value = null;
   };
+
+  console.log("image", image);
 
   return (
     <div>
@@ -131,7 +128,7 @@ const AddStudentComponent = () => {
               type="text"
               name="first_name"
               value={first_name}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setfname(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="First Name"
             />
@@ -139,16 +136,15 @@ const AddStudentComponent = () => {
               type="text"
               name="last_name"
               value={last_name}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setlname(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Last Name"
             />
             <input
               type="number"
               name="reg_number"
-              value={reg_number}
-              onChange={(e) => inputChange(e)}
-              className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+              disabled
+              className="bg-gray-100 border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Registration No."
             />
           </div>
@@ -157,7 +153,7 @@ const AddStudentComponent = () => {
               type="text"
               name="username"
               value={username}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setuname(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="User Name"
             />
@@ -165,30 +161,19 @@ const AddStudentComponent = () => {
               type="password"
               name="password"
               value={password}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setPassword(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Password"
             />
             <select
               name="class_number"
-              value={class_number}
-              onChange={(e) => inputChange(e)}
               className="bg-white border text-sm text-gray-500 px-2 py-1 w-96"
               placeholder="select class"
               id=""
             >
-              <option defaultValue="" hidden>
-                --Select Class--
+              <option className="text-black text-md ">
+                {cls.class_number}
               </option>
-              {list.map((data, id) => (
-                <option
-                  key={id}
-                  className="text-black text-md "
-                  value={data.id}
-                >
-                  {data.class_number}
-                </option>
-              ))}
             </select>
           </div>
           {/* second row */}
@@ -197,7 +182,7 @@ const AddStudentComponent = () => {
               type="number"
               name="mobile"
               value={mobile}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setmobile(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Phone No."
             />
@@ -205,8 +190,8 @@ const AddStudentComponent = () => {
             <input
               type="text"
               name="date_of_birth"
-              value={date_of_birth}
-              onChange={(e) => inputChange(e)}
+              value={dob || ""}
+              onChange={(e) => setDob(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Date of birth"
               id="date"
@@ -217,8 +202,8 @@ const AddStudentComponent = () => {
             <input
               type="text"
               name="admission_date"
-              value={admission_date}
-              onChange={(e) => inputChange(e)}
+              value={jdate || ""}
+              onChange={(e) => setJdate(e.target.value)}
               className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Admission date"
               id="date"
@@ -233,7 +218,7 @@ const AddStudentComponent = () => {
                 type="text"
                 name="gender"
                 value={gender}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setgen(e.target.value)}
                 className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="Gender."
               />
@@ -241,7 +226,7 @@ const AddStudentComponent = () => {
                 type="email"
                 name="email"
                 value={email}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setemail(e.target.value)}
                 className="bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="Email"
               />
@@ -251,7 +236,7 @@ const AddStudentComponent = () => {
                 type="text"
                 name="country"
                 value={country}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setCOuntry(e.target.value)}
                 className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="Country"
               />
@@ -259,7 +244,7 @@ const AddStudentComponent = () => {
                 type="text"
                 name="state"
                 value={state}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setState(e.target.value)}
                 className=" bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="State"
               />
@@ -269,7 +254,7 @@ const AddStudentComponent = () => {
                 type="text"
                 name="city"
                 value={city}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setCity(e.target.value)}
                 className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="City"
               />
@@ -277,7 +262,7 @@ const AddStudentComponent = () => {
                 type="text"
                 name="pincode"
                 value={pincode}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setPincode(e.target.value)}
                 className=" bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                 placeholder="Pincode"
               />
@@ -289,7 +274,7 @@ const AddStudentComponent = () => {
               <textarea
                 name="Address"
                 value={Address}
-                onChange={(e) => inputChange(e)}
+                onChange={(e) => setaddress(e.target.value)}
                 rows="2"
                 placeholder="Addressss"
                 className="border border-solid border-gray-300 w-auto  resize-none rounded placeholder:text-sm px-3 py-1"
@@ -345,14 +330,14 @@ const AddStudentComponent = () => {
               type="text"
               name="father"
               value={father}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setFather(e.target.value)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Father name."
             />
             <input
               name="father_id"
-              value={father_id}
-              onChange={(e) => inputChange(e)}
+              // value={father_id}
+              // onChange={(e) => inputChange(e)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Father ID."
             />
@@ -363,15 +348,15 @@ const AddStudentComponent = () => {
               type="text"
               name="mother"
               value={mother}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setMother(e.target.value)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Mother name."
             />
             <input
               type="text"
               name="mother_id"
-              value={mother_id}
-              onChange={(e) => inputChange(e)}
+              // value={mother_id}
+              // onChange={(e) => inputChange(e)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Mother ID."
             />
@@ -382,7 +367,7 @@ const AddStudentComponent = () => {
               type="text"
               name="father_mob"
               value={father_mob}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setFmob(e.target.value)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Father Mobile"
             />
@@ -390,7 +375,7 @@ const AddStudentComponent = () => {
               type="text"
               name="mother_mob"
               value={mother_mob}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => setMmob(e.target.value)}
               className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
               placeholder="Mother Mobile"
             />

@@ -10,7 +10,8 @@ from myadmin.serializer import (
     EmployeeSerializer,
     SubjectListSerializer,
     SubjectSerializer,
-    StudentSerializer
+    StudentSerializer,
+    TimeTableSerializer,
 )
 from rest_framework.response import Response
 from rest_framework import status
@@ -35,7 +36,6 @@ class AdminDashboard(APIView):
 class AddClassView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
 
-
     def post(self, request):
         data = request.data
         cls_num = data["class_number"]
@@ -45,7 +45,7 @@ class AddClassView(APIView):
             Q(class_number__icontains=cls_num) | Q(class_number__iexact="class ")
         )
         if check:
-            raise ValidationError({"error":"Class Already Exist"})
+            raise ValidationError({"error": "Class Already Exist"})
         else:
             addClass = AddClass.objects.create(class_number=cls_num, class_grade=grade)
         serializer = ClassSerializer(addClass)
@@ -172,13 +172,8 @@ class AdminAddStudent(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
-        student = StudentSerializer(data=request.data)
-        data = request.data
-        print("Image", data["image"])
-        if student.is_valid():
-            student.save()
-            return Response(student.data, status=status.HTTP_201_CREATED)
-        return Response(400)
+        pass
+
 
 
 class SingleStudent(APIView):
@@ -308,7 +303,7 @@ class EditTeacher(APIView):
     def post(self, request, id):
         data = request.data
         print("DATA", data)
-        ids = data.get('id')
+        ids = data.get("id")
 
         try:
             user = Account.objects.get(id=ids)
@@ -327,13 +322,11 @@ class EditTeacher(APIView):
                 user.username = username
             user.save()
         except Exception as e:
-            print('eeeeeeee', e)
+            print("eeeeeeee", e)
             pass
         instance = Teacher.objects.get(id=id)
-        serializer = TeacherSerializer(
-            instance=instance, data=data, partial=True
-        )
-        
+        serializer = TeacherSerializer(instance=instance, data=data, partial=True)
+
         if serializer.is_valid():
             print("serrrrrrrrrrrrrrr")
             serializer.save()
@@ -348,14 +341,11 @@ class SingleTeacherView(generics.RetrieveAPIView):
     lookup_field = "id"
 
 
-
-
-
 class TeaGen(APIView):
     def post(self, request, id):
         data = request.data
-        ids = data.get('id')
-        print('yyyyyy',ids)
+        ids = data.get("id")
+        print("yyyyyy", ids)
         try:
             user = Account.objects.get(id=ids)
             first_name = data.get("first_name")
@@ -372,7 +362,7 @@ class TeaGen(APIView):
                 user.username = username
             user.save()
         except Exception as e:
-            print("errorrr",e)
+            print("errorrr", e)
             pass
         tea = Teacher.objects.get(id=id)
         ser = TeacherSerializer(instance=tea, data=data, partial=True)
@@ -382,5 +372,11 @@ class TeaGen(APIView):
         return Response(500)
 
 
-
 # ADMIN TEACHER VIEW ENDS
+
+# ADMIN TIMETABLE
+
+
+class timeTableView(generics.ListAPIView):
+    queryset = timeTable.objects.all()
+    serializer_class = TimeTableSerializer
