@@ -103,7 +103,7 @@ class EditStudentByTeacher(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
+ 
 
 class DeleteStudentByTeacher(APIView):
     def post(self, request, id):

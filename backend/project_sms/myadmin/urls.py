@@ -49,6 +49,9 @@ urlpatterns=[
 
     #Timetable
 
-    path('timetable', timeTableView.as_view()),
+    path('timetable/<int:id>', timeTableView.as_view()),
+
+    path('test/<int:id>', SingleTableView.as_view()),
+    path("day/<int:id>",DaySubject.as_view())
 
 ]

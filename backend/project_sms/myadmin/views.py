@@ -1,12 +1,12 @@
-from functools import partial
-from django.shortcuts import render
+
+from calendar import day_name
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
 from employee.serializer import TeacherSerializer
 from employee.serializer import TeacherSerializer
 from myadmin.models import *
 from myadmin.serializer import (
     ClassSerializer,
+    DaySerializer,
     EmployeeSerializer,
     SubjectListSerializer,
     SubjectSerializer,
@@ -380,3 +380,41 @@ class TeaGen(APIView):
 class timeTableView(generics.ListAPIView):
     queryset = timeTable.objects.all()
     serializer_class = TimeTableSerializer
+
+    
+
+
+class tableView(APIView):
+    def get(self, request):
+        queryset= Day.objects.all()
+        serializer=DaySerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+    
+class SingleTableView(APIView):
+    def get(self, request, id):
+        cls = AddClass.objects.get(id=id)
+        # day = cls.day_set.all()
+        # sub = day.first()
+        # print('SUBBB', sub)
+        # ids = sub.id
+        # print(ids)
+        timetable = Day.objects.filter(class_number= cls)
+        data = DaySerializer(timetable, many=True)
+        return Response(data.data)
+ 
+
+
+
+class DaySubject(APIView):
+    def get(self, request, id):
+        cls = AddClass.objects.get(id=id)
+
+        s = cls.day_set.first()
+        day = Day.objects.filter(class_number=cls)
+        ser = DaySerializer(day, many=True)
+        return Response(ser.data)
+    

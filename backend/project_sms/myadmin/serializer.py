@@ -1,7 +1,8 @@
 from dataclasses import fields
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer,CharField
 from myadmin.models import *
 from customuser.models import Account
+
 
 
 class AccountSerializer(ModelSerializer):
@@ -88,9 +89,11 @@ class ExamSerializer(ModelSerializer):
         model = AddExam
         fields = "__all__"
 
+        
+
 
 class DaySerializer(ModelSerializer):
-    subject_name = SubjectListSerializer(many=True)
+    subject_name = SubjectListSerializer(read_only=True,many=True)
     class_number = ClassSerializer()
     class Meta:
         model = Day
@@ -100,7 +103,6 @@ class DaySerializer(ModelSerializer):
 
 class TimeTableSerializer(ModelSerializer):
     time_table = DaySerializer()
-
     class Meta:
         model = timeTable
         fields="__all__"

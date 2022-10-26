@@ -47,6 +47,8 @@ const NewClass = () => {
     });
   };
 
+  console.log('LIST', list)
+
   return (
     <div className="">
       <h1>Class</h1>

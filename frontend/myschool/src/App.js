@@ -22,13 +22,16 @@ import AdminTeacherPage from "./pages/Admin/Home/AdminTeacher/AdminTeacherPage";
 import TeachersLIst from "./components/AdminComponent/AdminTeacherComponent/TeachersLIst";
 import AddTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/AddTeacherComponent";
 import EditTeacherComponent from "./components/AdminComponent/AdminTeacherComponent/EditTeacherComponent";
-import Test from "./Test";
 import AdminTimeTbalePage from "./pages/Admin/Home/AdminTimeTable/AdminTimeTbalePage";
+import TimeTable from "./components/AdminComponent/AdminTimeTableComponent/TimeTable";
+import { TableProvider } from "./context/TableContext";
+import Test from "./Test";
 
 function App() {
   return (
     <div className="App">
       <AuthProvider>
+        <TableProvider>
         <Routes>
           {/* Admin Route */}
           <Route path="/" element={<AdminLoginPage />} />
@@ -85,7 +88,8 @@ function App() {
             <Route path="edit-teacher/:id" element={<EditTeacherComponent/>}/>
 
           </Route>
-          <Route path="/time-table" element={<AdminTimeTbalePage/>}>
+          <Route path="" element={<AdminTimeTbalePage/>}>
+            <Route path="/time-table" element={<TimeTable/>} />
 
           </Route>
 
@@ -111,10 +115,11 @@ function App() {
 
 
 
-            <Route path="/test" element={<Test/>}/>
 
-
+              <Route path='/test' element={<Test/>}
+              />
         </Routes>
+        </TableProvider>
       </AuthProvider>
     </div>
   );

@@ -26,6 +26,7 @@ module.exports = {
   
   plugins: [
 
-    require('tailwind-scrollbar')({ nocompatible: true }),('tailwindcss-filters')
+    require("tailwind-scrollbar-hide"),
+    require('tailwind-scrollbar')({ nocompatible: true })
   ],
 }

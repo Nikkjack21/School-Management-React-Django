@@ -6,16 +6,15 @@ import logo from "../../../assets/admin/dashlogo.png";
 import AuthContext from "../../../context/AuthContext";
 import { useContext } from "react";
 import { SidebarData } from "./SidebarData";
-import { useNavigate } from "react-router-dom";
+import SideMenu from "./SideMenu";
 
 const SideDrawer = ({ children }) => {
   const { adminLogout } = useContext(AuthContext);
-  const navigate = useNavigate()
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
   return (
-    <div>
+    <div className="h-[100vh] ">
       <nav className="h-[3.5em]  sticky top-0 z-50 bg-gradient-to-r from-blue-600 to-sky-400 flex justify-between">
         <div>
           <img
@@ -103,23 +102,16 @@ const SideDrawer = ({ children }) => {
           </Menu>
         </div>
       </nav>
-      <div className="sidebarNav flex h-screen">
-        <div className=" hidden lg:block lg:w-60 h-screen shadow-lg bg-white backdrop-blur-3xl ">
-          {SidebarData.map((data, id) => (
-
-            <div key={id} className=" flex  hover:bg-blue-500 hover:rounded-md hover:text-white group hover:drop-shadow-2xl hover:font-semibold  h-12">
-              <button onClick={()=> { navigate(data.path)} } className="group-hover:animate-pulse group-hover:scale-125 flex items-center ml-5 mr-2 group-hover:mr-4 ">{data.icon}</button>
-              <button onClick={()=> { navigate(data.path)} } className="text-sm group-hover:scale-110  font-Poppins   ">
-                {data.name}
-              </button>
-            </div>
-              
-          ))}
+      <div className="sidebarNav h-full  flex  ">
+        <div className="lg:block hidden lg:w-60   shadow-lg border backdrop-blur-3xl bg-white ">
+          <div className=" ">
+            {SidebarData.map((item, id) => (
+              <SideMenu item={item} key={id} />
+            ))}
+          </div>
         </div>
 
-        <div className="bg-[#f6f7fb]  h-full w-full">
-          {children} 
-        </div>
+        <div className="bg-[#f6f7fb] h-full overflow-hidden w-full">{children}</div>
       </div>
     </div>
   );

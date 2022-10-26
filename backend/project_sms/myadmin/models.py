@@ -190,7 +190,7 @@ class Teacher(models.Model):
 class Day(models.Model):
     day_name = models.CharField(max_length=15)
     subject_name = models.ManyToManyField(SubjectList)
-    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE)
+    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.class_number.class_number

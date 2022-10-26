@@ -46,8 +46,17 @@ export const SidebarData = [
   },
   {
     name: "Time Table",
-    path: '/time-table',
-    icon: <AiOutlineTable/>
+    path: '',
+    icon: <AiOutlineTable/>,
+    subNav: [
+      {
+        name: "Show Timetable",
+        path: "/time-table",
+        icon: "",
+      },
+
+    ],
+
   },
   {
     name:"Accounts",
