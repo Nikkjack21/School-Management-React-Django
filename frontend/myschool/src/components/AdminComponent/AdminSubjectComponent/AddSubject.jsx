@@ -47,12 +47,6 @@ const AddSubject = ({ open, cancel }) => {
 
 
 
-  console.log("CLASS-NUM", classNum);
-  console.log("SUB-NAME", subName);
-  console.log("CLASS-SELECT", selectClass);
-  console.log("SUB-SELECT", selectSub);
-  console.log("MARKS", marks);
-  console.log("GRADE", grade);
 
   return (
     <div>

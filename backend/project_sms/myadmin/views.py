@@ -1,18 +1,10 @@
-
 from calendar import day_name
 from rest_framework.views import APIView
 from employee.serializer import TeacherSerializer
 from employee.serializer import TeacherSerializer
 from myadmin.models import *
-from myadmin.serializer import (
-    ClassSerializer,
-    DaySerializer,
-    EmployeeSerializer,
-    SubjectListSerializer,
-    SubjectSerializer,
-    StudentSerializer,
-    TimeTableSerializer,
-)
+
+from myadmin.serializer import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -173,7 +165,6 @@ class AdminAddStudent(APIView):
 
     def post(self, request):
         pass
-
 
 
 class SingleStudent(APIView):
@@ -376,45 +367,42 @@ class TeaGen(APIView):
 
 # ADMIN TIMETABLE
 
-
-class timeTableView(generics.ListAPIView):
-    queryset = timeTable.objects.all()
-    serializer_class = TimeTableSerializer
-
-    
+class AllDays(generics.ListAPIView):
+    queryset=Day.objects.all()
+    serializer_class=DaySerializer
 
 
-class tableView(APIView):
-    def get(self, request):
-        queryset= Day.objects.all()
-        serializer=DaySerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-
-    
-class SingleTableView(APIView):
+class TimeTableView(APIView):
     def get(self, request, id):
-        cls = AddClass.objects.get(id=id)
-        # day = cls.day_set.all()
-        # sub = day.first()
-        # print('SUBBB', sub)
-        # ids = sub.id
-        # print(ids)
-        timetable = Day.objects.filter(class_number= cls)
-        data = DaySerializer(timetable, many=True)
-        return Response(data.data)
- 
+        class_number = AddClass.objects.get(id=id)
+        day = Day.objects.filter(class_number=class_number.id)
+        print(day)
+        serializer = DaySerializer(day, many=True)
+        return Response(serializer.data)
+        
+
+
+class AddTimeTable(APIView):
+    def post(self, request):
+        data = request.data
+        dy_name = data.get('day_name')
+        day_name = dy_name.lower()
+        subject_name = SubjectList.objects.get(id=data.get("subject_name"))
+        if  Day.objects.filter(class_number__id=data["class_number"], day_name=day_name).exists():
+            for day in Day.objects.filter(day_name=day_name):
+                day.subject_name.add(subject_name)            
+        else:
+            class_num = AddClass.objects.get(id=data["class_number"])
+            day = Day.objects.create(class_number=class_num, day_name=day_name)
+            day.subject_name.add(subject_name)
+        serializer = DaySerializer(day)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+#new time table
 
 
 
-class DaySubject(APIView):
-    def get(self, request, id):
-        cls = AddClass.objects.get(id=id)
 
-        s = cls.day_set.first()
-        day = Day.objects.filter(class_number=cls)
-        ser = DaySerializer(day, many=True)
-        return Response(ser.data)
-    
+
+

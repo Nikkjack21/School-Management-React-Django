@@ -1,12 +1,10 @@
-from email.policy import default
+from tabnanny import verbose
 from django.db import models
 import random
-import string
 from customuser.models import Account
+from sortedm2m.fields import SortedManyToManyField
 
 # Create your models here.
-
-
 def name_gen():
     characters = list("abcdefghijklmnopqrstuv1234567890")
     length = 6
@@ -58,7 +56,9 @@ class AddSubject(models.Model):
 class AddStudent(models.Model):
 
     student_name = models.ForeignKey(Account, on_delete=models.CASCADE)
-    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE,null=True, blank=True)
+    class_number = models.ForeignKey(
+        AddClass, on_delete=models.CASCADE, null=True, blank=True
+    )
     reg_number = models.IntegerField(default=random_reg_id)
     image = models.ImageField(
         upload_to="photos/student", blank=True, max_length=3500, null=True
@@ -163,14 +163,11 @@ class AddClassTest(models.Model):
         return self.class_num
 
 
-
 class Teacher(models.Model):
     class_number = models.ForeignKey(
-        AddClass, on_delete=models.PROTECT,null=True, blank=True
+        AddClass, on_delete=models.PROTECT, null=True, blank=True
     )
-    user = models.ForeignKey(
-        Account, on_delete=models.CASCADE,  null=True, blank=True
-    )
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     mobile = models.IntegerField(null=True, blank=True)
     post_name = models.CharField(max_length=20, null=True, blank=True)
     image = models.ImageField(upload_to="photos/teachers", null=True, blank=True)
@@ -179,25 +176,20 @@ class Teacher(models.Model):
     experience = models.CharField(max_length=10, null=True, blank=True)
     address = models.TextField(max_length=300, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    gender=models.CharField(max_length=10, null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
 
 
-
-
 class Day(models.Model):
     day_name = models.CharField(max_length=15)
-    subject_name = models.ManyToManyField(SubjectList)
-    class_number = models.ForeignKey(AddClass, on_delete=models.CASCADE, null=True, blank=True)
+    subject_name = SortedManyToManyField(SubjectList)
+    class_number = models.ForeignKey(
+        AddClass, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
-        return self.class_number.class_number
+        return self.day_name
 
-class timeTable(models.Model):
-    time_table =  models.ForeignKey(Day, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.time_table.class_number.class_number
 

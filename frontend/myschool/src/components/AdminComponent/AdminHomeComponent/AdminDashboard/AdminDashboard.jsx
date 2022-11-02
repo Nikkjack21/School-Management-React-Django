@@ -7,7 +7,6 @@ import { useContext } from "react";
 import AuthContext from "../../../../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import AdminCharts from "../../OtherComponents/AdminCharts";
 
 const AdminDashboard = () => {
   const {admin} = useContext(AuthContext)
@@ -80,10 +79,7 @@ useEffect(()=>{
           <div className="welcome-left w-full">
             
               <WelcomeDash />
-              <div className="left-chart mt-5">
-                <AdminCharts/>
-              </div>
-            
+          
           </div>
           <div className="lg:block welcome-right">
             sample

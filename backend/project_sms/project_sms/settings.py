@@ -45,9 +45,12 @@ INSTALLED_APPS = [
     "myadmin",
     "employee",
     "student",
+    'sortedm2m',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -91,6 +94,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'sms_DB', 
+#         'USER': 'postgres',
+#         'PASSWORD': '7025',
+#         'HOST': '127.0.0.1', 
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -148,7 +161,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DATE_FORMAT": "%d-%m-%Y",
-    "DATETIME_FORMAT": "%d-%m-%Y %H:%M:%S",
+    "DATETIME_FORMAT": "%d-%m-%Y %I:%M:%S",
+    
 }
 
 
@@ -175,3 +189,7 @@ SIMPLE_JWT = {
     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
     "JTI_CLAIM": "jti",
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

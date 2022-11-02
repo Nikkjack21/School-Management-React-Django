@@ -1,5 +1,6 @@
 from dataclasses import fields
-from rest_framework.serializers import ModelSerializer,CharField
+from pyexpat import model
+from rest_framework.serializers import ModelSerializer,RelatedField, CharField
 from myadmin.models import *
 from customuser.models import Account
 
@@ -91,19 +92,10 @@ class ExamSerializer(ModelSerializer):
 
         
 
-
 class DaySerializer(ModelSerializer):
-    subject_name = SubjectListSerializer(read_only=True,many=True)
-    class_number = ClassSerializer()
+    subject_name = SubjectListSerializer(many=True)
     class Meta:
         model = Day
-        fields= "__all__"
+        fields= '__all__'
 
-        
-
-class TimeTableSerializer(ModelSerializer):
-    time_table = DaySerializer()
-    class Meta:
-        model = timeTable
-        fields="__all__"
 

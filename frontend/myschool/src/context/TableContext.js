@@ -8,12 +8,16 @@ export const TableProvider = ({ children }) => {
 
 const [classNumID, setClassNum] = useState("")
 
+const [subName, setSubName] = useState('')
 
+console.log('TABLECONTEXT', classNumID);
 
 
   const newData = {
     classNumID:classNumID,
+    subName:subName,
     setClassNum:setClassNum,
+    setSubName:setSubName,
 
   };
 

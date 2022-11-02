@@ -25,7 +25,7 @@ admin.site.register(AttendanceReport)
 admin.site.register(AddExam)
 admin.site.register(SubjectList)
 admin.site.register(Day)
-admin.site.register(timeTable)
+
 
 
 
