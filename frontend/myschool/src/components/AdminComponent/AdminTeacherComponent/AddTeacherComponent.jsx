@@ -63,9 +63,9 @@ const AddTeacherComponent = () => {
       })
       .then((response) => {
         console.log("Respo", response);
-        if(response.status === 201){
-          navigate("/admin-teachers")
-          alert('Teacher added')
+        if (response.status === 201) {
+          navigate("/admin-teachers");
+          alert("Teacher added");
         }
       });
   };
@@ -85,6 +85,10 @@ const AddTeacherComponent = () => {
     e.preventDefault();
     setImage();
     inpRef.current.value = null;
+  };
+
+  const onCheckhandle = (e) => {
+    setTeacher({ ...teacher, is_class_teacher: e.target.value });
   };
 
   return (
@@ -107,7 +111,7 @@ const AddTeacherComponent = () => {
         <form onSubmit={handleSubmit}>
           <div className="mx-10">
             {/* first row */}
-            <div className="flex mx-3  justify-between mb-3 gap-2">
+            <div className="flex justify-between mb-3 gap-2">
               <input
                 type="text"
                 name="first_name"
@@ -134,7 +138,7 @@ const AddTeacherComponent = () => {
                 placeholder="register no."
               />
             </div>
-            <div className="flex mx-3  justify-between mb-3 gap-2">
+            <div className="flex  justify-between mb-3 gap-2">
               <input
                 type="text"
                 name="user_name"
@@ -163,14 +167,18 @@ const AddTeacherComponent = () => {
                   --Select Class--
                 </option>
                 {list.map((data, id) => (
-                  <option key={id} value={data.id} className="text-black text-md ">
+                  <option
+                    key={id}
+                    value={data.id}
+                    className="text-black text-md "
+                  >
                     {data.class_number}
                   </option>
                 ))}
               </select>
-            </div>  
+            </div>
             {/* second row */}
-            <div className="flex mb-3 justify-evenly gap-2">
+            <div className="flex  mb-3 justify-between gap-2">
               <input
                 type="number"
                 name="mobile"
@@ -205,8 +213,8 @@ const AddTeacherComponent = () => {
               />
             </div>
             {/* third row */}
-            <div className="grid grid-cols-3 mb-3  ">
-              <div className="grid place-content-center">
+            <div className="grid grid-cols-3 mb-3 gap-5   ">
+              <div className="grid place-content-between">
                 <input
                   type="text"
                   name="gender"
@@ -225,7 +233,7 @@ const AddTeacherComponent = () => {
                 />
               </div>
 
-              <div className="grid place-content-center">
+              <div className="grid ">
                 <input
                   type="text"
                   name="salary"
@@ -244,7 +252,7 @@ const AddTeacherComponent = () => {
                 />
               </div>
 
-              <div className="grid place-content-start">
+              <div className="grid place-content-between">
                 <input
                   type="text"
                   name="post_name"
@@ -256,17 +264,47 @@ const AddTeacherComponent = () => {
               </div>
             </div>
             {/* Fourth row */}
-            <div className="grid grid-cols-3 mb-2">
-              <div className="grid place-content-center w-96">
+            <div className="grid grid-cols-3">
+              <div className="grid  place-content-between w-96">
                 <textarea
                   name="address"
                   value={address}
                   onChange={(e) => inputChange(e)}
                   rows="2"
                   placeholder="Addressss"
-                  className="border border-solid border-gray-300 w-auto  resize-none rounded placeholder:text-sm px-3 py-1"
+                  className="border border-solid mb-2 border-gray-300 w-auto  resize-none rounded placeholder:text-sm px-3 py-1 "
                 ></textarea>
+
+                <div className="flex flex-col ">
+                  <div className="flex items-center mb-1 ">
+                    <input
+                      id="inline-radio"
+                      type="radio"
+                      value="0"
+                      name="is_class_teacher"
+                      onChange={onCheckhandle}
+                      className="w-4 h-4 text-blue-600 mb- bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label className="ml-2 text-sm font-medium text-gray-900">
+                      Not class teacher
+                    </label>
+                  </div>
+                  <div className="flex items-center mr-4 ">
+                    <input
+                      id="inline-2-radio"
+                      type="radio"
+                      value="1"
+                      onChange={onCheckhandle}
+                      name="is_class_teacher"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label className="ml-2 text-sm font-medium text-gray-900 ">
+                      Is class teacher
+                    </label>
+                  </div>
+                </div>
               </div>
+
               {/* IMAGE */}
               <div className="grid place-content-center ">
                 <div className="flex items-center border h-9 px-2 truncate  bg-white">

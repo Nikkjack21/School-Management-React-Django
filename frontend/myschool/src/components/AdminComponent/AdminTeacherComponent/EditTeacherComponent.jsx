@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../../context/AuthContext";
 import { MdDeleteForever } from "react-icons/md";
 
@@ -13,6 +13,7 @@ const EditTeacherComponent = () => {
   const { userID } = useContext(AuthContext);
   const [image, setImage] = useState();
   const inpRef = useRef();
+  const navigate = useNavigate()
 
   const [first_name, setfname] = useState("");
   const [last_name, setlname] = useState("");
@@ -28,13 +29,16 @@ const EditTeacherComponent = () => {
   const [experience, setexperience] = useState("");
   const [post_name, setpost_name] = useState("");
   const [classname, setcname] = useState("");
+  const [checked, setChecked] = useState("");
+
+  const [newCheck, setNewCheck] = useState("");
 
   useEffect(() => {
     const loadTeacher = async () => {
       const response = await axios.get(
         `http://127.0.0.1:8000/teacher-detail/${id}`
       );
-      console.log("RESPOOOOONSEEE", response);
+      console.log("RESPOOOOONSEEE", response.data);
       setfname(response.data.user.first_name);
       setlname(response.data.user.last_name);
       setemail(response.data.user.email);
@@ -49,12 +53,13 @@ const EditTeacherComponent = () => {
       setexperience(response.data.experience);
       setpost_name(response.data.post_name);
       setcname(response.data.class_number);
+      setChecked(response.data.user.is_class_teacher);
     };
     loadTeacher();
   }, [id]);
 
-  // console.log("first_name", first_name);
-  // console.log("classname", classname);
+  console.log("CHECKED", checked);
+  console.log('USER_ID', userID);
 
   const imageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -70,25 +75,30 @@ const EditTeacherComponent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://127.0.0.1:8000/edit-teacher/${id}`, {
-        id: userID.id,
-        first_name: first_name,
-        last_name: last_name,
-        username: username,
-        email: email,
-        // join_date: join_date,
-        // address: address,
-        gender: gender,
-        mobile: mobile,
-        salary: salary,
-        experience: experience,
-        post_name: post_name,
-        image: image,
-      },{
-        headers: {
-          "Content-Type": "multipart/form-data",
+      .post(
+        `http://127.0.0.1:8000/edit-teacher/${id}`,
+        {
+          user: userID.id,
+          first_name: first_name,
+          last_name: last_name,
+          username: username,
+          email: email,
+          // join_date: join_date,
+          // address: address,
+          gender: gender,
+          mobile: mobile,
+          salary: salary,
+          experience: experience,
+          post_name: post_name,
+          image: image,
+          is_class_teacher:newCheck
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      })
+      )
       .then((response) => {
         console.log("RESPOOO", response.data);
       })
@@ -97,6 +107,8 @@ const EditTeacherComponent = () => {
       });
   };
 
+
+  console.log('new-Check', newCheck);
 
   return (
     <div>
@@ -118,7 +130,7 @@ const EditTeacherComponent = () => {
         <form onSubmit={handleSubmit}>
           <div className="mx-10">
             {/* first row */}
-            <div className="flex mx-3  justify-between mb-3 gap-2">
+            <div className="flex   justify-between  gap-2">
               <div>
                 <label className="text-xs text-gray-500" htmlFor="">
                   First Name:
@@ -159,7 +171,7 @@ const EditTeacherComponent = () => {
                 />
               </div>
             </div>
-            <div className="flex mx-3  justify-between mb-3 gap-2">
+            <div className="flex  justify-between ">
               <div>
                 <label className="text-xs text-gray-500" htmlFor="">
                   Userame:
@@ -207,7 +219,7 @@ const EditTeacherComponent = () => {
               </div>
             </div>
             {/* second row */}
-            <div className="flex mb-3 mx-3 justify-evenly gap-2">
+            <div className="flex   justify-between gap-2">
               <div>
                 <label className="text-xs text-gray-500" htmlFor="">
                   Mobile:
@@ -232,7 +244,7 @@ const EditTeacherComponent = () => {
                   type="text"
                   name="date_of_birth"
                   value={date_of_birth}
-                  className="bg-gray-100 cursor-not-allowed border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+                  className="bg-gray-100 cursor-not-allowed border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-full "
                   placeholder="Date of birth"
                   id="date"
                   onFocus={(e) => (e.target.type = "date")}
@@ -258,8 +270,8 @@ const EditTeacherComponent = () => {
               </div>
             </div>
             {/* third row */}
-            <div className="grid grid-cols-3 mb-3 mx-2 ">
-              <div className="grid place-content-center">
+            <div className="grid grid-cols-3  ">
+              <div className="grid place-content-between">
                 <label className="text-xs text-gray-500" htmlFor="">
                   Gender:
                 </label>
@@ -269,7 +281,7 @@ const EditTeacherComponent = () => {
                   name="gender"
                   value={gender || ""}
                   onChange={(e) => setgen(e.target.value)}
-                  className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+                  className=" bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                   placeholder="Gender"
                 />
                 <label className="text-xs text-gray-500" htmlFor="">
@@ -296,7 +308,7 @@ const EditTeacherComponent = () => {
                   name="salary"
                   value={salary || ""}
                   onChange={(e) => setsalary(e.target.value)}
-                  className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+                  className=" bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                   placeholder="Salary"
                 />
                 <label className="text-xs text-gray-500" htmlFor="">
@@ -323,14 +335,14 @@ const EditTeacherComponent = () => {
                   name="post_name"
                   value={post_name || ""}
                   onChange={(e) => setpost_name(e.target.value)}
-                  className="mb-3 bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
+                  className=" bg-white border placeholder:text-sm placeholder:text-gray-500 px-2 py-1 w-96 "
                   placeholder="Post name"
                 />
               </div>
             </div>
             {/* Fourth row */}
             <div className="grid grid-cols-3 mb-2 ">
-              <div className="grid place-content-center w-96 mx-3">
+              <div className="grid place-content-bewtween w-96 ">
                 <label className="text-xs text-gray-500" htmlFor="">
                   Address:
                 </label>
@@ -343,6 +355,38 @@ const EditTeacherComponent = () => {
                   placeholder="Addressss"
                   className="border border-solid border-gray-300 w-96  resize-none rounded placeholder:text-sm px-3 py-1"
                 ></textarea>
+
+                <div className="flex flex-col ">
+                  {checked ? (
+                    <div className="flex items-center mb-1 ">
+                      <input
+                        id="inline-radio"
+                        type="radio"
+                        value="0"
+                        name="is_class_teacher"
+                        onChange={(e) => setNewCheck(e.target.value)}
+                        className="w-4 h-4 text-blue-600 mb- bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label className="ml-2 text-sm font-medium text-gray-900">
+                        Remove class teacher
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="flex items-center mr-4 ">
+                      <input
+                        id="inline-2-radio"
+                        type="radio"
+                        value="1"
+                        onChange={(e) => setNewCheck(e.target.value)}
+                        name="is_class_teacher"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label className="ml-2 text-sm font-medium text-gray-900 ">
+                        Set class teacher
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
               {/* IMAGE */}
               <div className="grid place-content-center ">
@@ -387,7 +431,7 @@ const EditTeacherComponent = () => {
             <button className="px-10 py-2 bg-[#504fac] hover:bg-violet-700 rounded-sm text-white">
               Submit
             </button>
-            <button className="px-7 py-2 bg-red-400 rounded-sm text-white hover:bg-red-500">
+            <button onClick={()=>navigate('/admin-teachers')} className="px-7 py-2 bg-red-400 rounded-sm text-white hover:bg-red-500">
               Cancel
             </button>
           </div>

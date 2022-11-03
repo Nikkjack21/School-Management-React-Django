@@ -1,6 +1,5 @@
-from dataclasses import fields
-from pyexpat import model
-from rest_framework.serializers import ModelSerializer,RelatedField, CharField
+
+from rest_framework.serializers import ModelSerializer
 from myadmin.models import *
 from customuser.models import Account
 
@@ -16,6 +15,10 @@ class AccountSerializer(ModelSerializer):
             "username",
             "email",
             "password",
+            'is_teacher',
+            'is_student',
+            'is_class_teacher',
+            'is_admin'
         ]
         extra_kwargs = {"password": {"write_only": True}}
 

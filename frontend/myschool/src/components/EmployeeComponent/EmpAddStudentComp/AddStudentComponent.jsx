@@ -104,6 +104,8 @@ const AddStudentComponent = () => {
 
   console.log("image", image);
 
+  console.log('CLASS-ID', cls);
+
   return (
     <div>
       <h1 className="flex justify-center mt-8 mb-3 text-2xl text-red-500 font-semibold">

@@ -48,27 +48,6 @@ const AddSubjectComp = () => {
       });
   };
 
-  //   const assignSubject = async(e) => {
-  //     e.preventDefault();
-  //     const response = await fetch("http://127.0.0.1:8000/add-subject", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         selectClass,
-  //         selectSub,
-  //         marks,
-  //         grade,
-  //       }),
-  //     });
-
-  //     if (response.status === 400) {
-  //       alert("NOT SUCCESSFULL");
-  //     } else  {
-  //       alert("SUCCESS");
-  //     }
-  //   };
 
 
 

@@ -13,7 +13,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.serializers import ValidationError
 from django.db.models import Q
-
+import json
 
 # Create your views here.
 
@@ -258,6 +258,9 @@ class AddTeacher(APIView):
     def post(self, request):
         data = request.data
         cls = AddClass.objects.get(id=data["class_number"])
+        class_teacher = data.get("is_class_teacher", 0)
+
+        print(class_teacher)
 
         username = data.get("user_name")
         email = data["email"]
@@ -272,6 +275,7 @@ class AddTeacher(APIView):
             last_name=data["last_name"],
         )
         user.is_teacher = True
+        user.is_class_teacher = class_teacher
         user.save()
         teacher = Teacher.objects.create(
             class_number=cls,
@@ -284,6 +288,7 @@ class AddTeacher(APIView):
             address=data["address"],
             experience=data["experience"],
             image=data.get("image"),
+            gender=data.get("gender"),
         )
         teacher.save()
         serializer = TeacherSerializer(teacher)
@@ -294,32 +299,30 @@ class EditTeacher(APIView):
     def post(self, request, id):
         data = request.data
         print("DATA", data)
-        ids = data.get("id")
+        user = Account.objects.get(id=data.get('user'))
+        print(user)
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        username = data.get("username")
+        email = data.get("email")
+        class_teacher = data.get('is_class_teacher')
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if email:
+            user.email = email
+        if username:
+            user.username = username
+        if class_teacher:
+            user.is_class_teacher = class_teacher
+        user.save()
 
-        try:
-            user = Account.objects.get(id=ids)
-            print("USERRRRRRRRRRRRRRRRRRR", user.id)
-            first_name = data.get("first_name")
-            last_name = data.get("last_name")
-            username = data.get("username")
-            email = data.get("email")
-            if first_name:
-                user.first_name = first_name
-            if last_name:
-                user.last_name = last_name
-            if email:
-                user.email = email
-            if username:
-                user.username = username
-            user.save()
-        except Exception as e:
-            print("eeeeeeee", e)
-            pass
         instance = Teacher.objects.get(id=id)
         serializer = TeacherSerializer(instance=instance, data=data, partial=True)
 
         if serializer.is_valid():
-            print("serrrrrrrrrrrrrrr")
+            print("SERAILAIZER VALID")
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -336,7 +339,6 @@ class TeaGen(APIView):
     def post(self, request, id):
         data = request.data
         ids = data.get("id")
-        print("yyyyyy", ids)
         try:
             user = Account.objects.get(id=ids)
             first_name = data.get("first_name")
@@ -367,9 +369,10 @@ class TeaGen(APIView):
 
 # ADMIN TIMETABLE
 
+
 class AllDays(generics.ListAPIView):
-    queryset=Day.objects.all()
-    serializer_class=DaySerializer
+    queryset = Day.objects.all()
+    serializer_class = DaySerializer
 
 
 class TimeTableView(APIView):
@@ -379,30 +382,22 @@ class TimeTableView(APIView):
         print(day)
         serializer = DaySerializer(day, many=True)
         return Response(serializer.data)
-        
 
 
 class AddTimeTable(APIView):
     def post(self, request):
         data = request.data
-        dy_name = data.get('day_name')
+        dy_name = data.get("day_name")
         day_name = dy_name.lower()
         subject_name = SubjectList.objects.get(id=data.get("subject_name"))
-        if  Day.objects.filter(class_number__id=data["class_number"], day_name=day_name).exists():
+        if Day.objects.filter(
+            class_number__id=data["class_number"], day_name=day_name
+        ).exists():
             for day in Day.objects.filter(day_name=day_name):
-                day.subject_name.add(subject_name)            
+                day.subject_name.add(subject_name)
         else:
             class_num = AddClass.objects.get(id=data["class_number"])
             day = Day.objects.create(class_number=class_num, day_name=day_name)
             day.subject_name.add(subject_name)
         serializer = DaySerializer(day)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-#new time table
-
-
-
-
-
-

@@ -4,7 +4,7 @@ from myadmin.serializer import  AccountSerializer, ClassSerializer
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 
-class TeacherSerializer(WritableNestedModelSerializer,ModelSerializer):
+class TeacherSerializer(WritableNestedModelSerializer):
     user = AccountSerializer()
     class_number = ClassSerializer()
 

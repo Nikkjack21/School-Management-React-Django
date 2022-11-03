@@ -50,7 +50,7 @@ class AddStudentByTeacher(APIView):
         class_number = AddClass.objects.get(id=data.get("class_number"))
   
         print('class_numberrrrrr', class_number)
-        user = Account.objects.create(
+        user = Account.objects.create_user(
             first_name=data["first_name"],
             last_name=data["last_name"],
             username=data["username"],
