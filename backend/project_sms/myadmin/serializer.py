@@ -1,7 +1,8 @@
 
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from myadmin.models import *
 from customuser.models import Account
+
 
 
 
@@ -22,6 +23,12 @@ class AccountSerializer(ModelSerializer):
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
+    def validate(self, data):
+        if data['first_name'] == '':
+            raise ValidationError({'error': "Firstname cannot be blank"})
+        return data
+
+        pass
 
 class ClassSerializer(ModelSerializer):
     class Meta:

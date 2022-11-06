@@ -86,7 +86,7 @@ const AddStudentComponent = () => {
       })
       .catch((error) => {
         alert(error);
-        console.log("Error", error);
+        console.log("Error",error);
       });
   };
 

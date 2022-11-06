@@ -41,7 +41,7 @@ const NewClass = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const resp = axios.post(`http://127.0.0.1:8000/delete-class/${id}`);
-        Swal.fire("", "class has been deleted");
+        Swal.fire("class has been deleted");
         setSee(resp);
       }
     });

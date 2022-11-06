@@ -57,6 +57,8 @@ class AddStudentByTeacher(APIView):
             email=data["email"],
             password=data["password"],
         )
+
+ 
         user.is_student = True
         user.save()
         student = AddStudent.objects.create(
